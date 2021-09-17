@@ -38,6 +38,8 @@ lis = makeTokenParser
                         , "!="
                         , ";"
                         , ","
+                        , "{"
+                        , "}" -- van aca agregados los corchetes para parsearlos??
                         ]
     , identStart      = letter <|> char '_'
     , identLetter     = alphaNum <|> char '_'
@@ -79,15 +81,67 @@ intexp = parens lis intexp <|> intexp1
 --- Parser de expressiones booleanas
 ------------------------------------
 
+boolexp1 :: Parser (Exp Bool)
+boolexp1 = try chainl1 boolexp (do{ reservedOp lis "||"; return Or })
+           <|>
+           try chainl1 boolexp (do{ reservedOp lis "&&"; return And })
+           <|>
+           try ( do reservedOp lis "!"
+                    x <- boolexp
+                    return (Not x) )
+           <|>
+           chainl1 intexp ( try (do{ reservedOp lis "=="; return Eq })
+                             <|>
+                             try (do{ reservedOp lis "!="; return NEq })
+                             <|>
+                             try (do{ reservedOp lis "<"; return Lt })
+                             <|> 
+                             try (do{ reservedOp lis ">"; return Gt }) )
+           <|>
+           do reserved lis "true"
+              return BTrue
+           <|>
+           do reserved lis "false"
+              return BFalse
+
 boolexp :: Parser (Exp Bool)
-boolexp = undefined
+boolexp = parens lis boolexp <|> boolexp1
 
 -----------------------------------
 --- Parser de comandos
 -----------------------------------
 
+-- orden de precedencia??
+-- como parseamos el dangling else
+-- que onda con los if anidados
+       
+
 comm :: Parser Comm
-comm = undefined
+comm = try chainl1 comm (do{ reservedOp lis ";"; return Seq })
+       <|>
+       try ( do reserved lis "repeat"
+                x <- comm
+                reserved lis "until"
+                b <- boolexp
+                reserved lis "end"
+                return (Repeat x b) )
+       <|>
+       try ( do reserved lis "if"
+                b2 <- boolexp
+                y <- braces lis comm
+                (try (do reseved lis "else"
+                         y2 <- braces lis comm
+                         return IfThenElse b2 y y2)
+                 <|>
+                 return IfThen b2 y) ) -- pattern me define un sinonimo de tipo o que es?
+       <|> 
+       try ( do v <- identifier lis
+                reservedOp lis "="
+                e <- intexp
+                return (Let v e) )
+       <|>
+       do reserved lis "skip"
+          return Skip
 
 ------------------------------------
 -- Función de parseo
