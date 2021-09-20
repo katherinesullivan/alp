@@ -11,7 +11,38 @@
 \usepackage{fancyhdr}
 \usepackage{nameref}
 \usepackage{wrapfig}
+\usepackage{ebproof}
 
+\usepackage{listings}
+% for haskell style
+\usepackage{xcolor}
+\definecolor{mGreen}{rgb}{0,0.6,0}
+\definecolor{mGray}{rgb}{0.5,0.5,0.5}
+\definecolor{mPurple}{rgb}{0.58,0,0.82}
+\definecolor{backgroundColour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{HaskellStyle}{
+    backgroundcolor=\color{backgroundColour},   
+    commentstyle=\color{mGreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{mGray},
+    stringstyle=\color{mPurple},
+    basicstyle=\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2,
+    language=Haskell
+}
+
+% to set spacing between lines
+\usepackage{setspace}
 
 % to rotate content 90 degrees
 \usepackage{lscape}
@@ -19,9 +50,6 @@
 % to define deriving trees
 % \usepackage{ebproof}
 \usepackage{prftree}
-
-% to set spacing between lines
-\usepackage{setspace}
 
 % defining command for the curly arrow
 \newcommand{\curly}{\mathrel{\leadsto}}
@@ -267,5 +295,218 @@ Habria que enunciar las nuevas reglas (ejercicio 4) y cambiar el nombre aca, y e
 \end{landscape}
 
 
+\section*{Ejercicio 2}
+
+\begin{lstlisting}[style = HaskellStyle]
+    -- Expresiones, aritmeticas y booleanas
+data Exp a where
+  -- Expresiones enteras
+  Const ::Int -> Exp Int
+  Var ::Variable -> Exp Int
+  UMinus ::Exp Int -> Exp Int
+  Plus ::Exp Int -> Exp Int -> Exp Int
+  Minus ::Exp Int -> Exp Int -> Exp Int
+  Times ::Exp Int -> Exp Int -> Exp Int
+  Div ::Exp Int -> Exp Int -> Exp Int
+  EAssgn ::Variable -> Exp Int -> Exp Int
+  ESeq ::Exp Int -> Exp Int -> Exp Int
+
+  -- Expreseiones booleanas
+  BTrue ::Exp Bool
+  BFalse ::Exp Bool
+  Lt ::Exp Int -> Exp Int -> Exp Bool
+  Gt ::Exp Int -> Exp Int -> Exp Bool
+  And ::Exp Bool -> Exp Bool -> Exp Bool
+  Or ::Exp Bool -> Exp Bool -> Exp Bool
+  Not ::Exp Bool -> Exp Bool
+  Eq ::Exp Int -> Exp Int -> Exp Bool
+  NEq ::Exp Int -> Exp Int -> Exp Bool
+\end{lstlisting}
+
+\section*{Ejercicio 4}
+
+\subsection*{Sem\'antica Operacional Big-Step para Expresiones}
+\vspace{0.5cm}
+
+\begin{center}
+\begin{prooftree}
+    \hypo{}
+    \infer1[NVAL]{\langle nv,\sigma \rangle \Downarrow_{exp} \langle \textbf{nv},\sigma \rangle }
+\end{prooftree}
+\hspace{1cm}
+\begin{prooftree}
+    \hypo{}
+    \infer1[VAR]{\langle x,\sigma \rangle \Downarrow_{exp} \langle \sigma x,\sigma \rangle }
+\end{prooftree}
+\end{center}
+
+\begin{center}
+\begin{prooftree}
+    \hypo{\langle e,\sigma \rangle \Downarrow_{exp} \langle n,\sigma' \rangle}
+    \infer1[UMINUS]{\langle -_{u}e,\sigma \rangle \Downarrow_{exp} \langle -n, \sigma' \rangle}
+\end{prooftree}
+\hspace{1cm}
+\begin{prooftree}
+    \hypo{\langle e_0,\sigma \rangle \Downarrow_{exp} \langle n_0,\sigma' \rangle}
+    \hypo{\langle e_1,\sigma' \rangle \Downarrow_{exp} \langle n_1,\sigma'' \rangle}
+    \infer2[PLUS]{\langle e_0+e_1,\sigma \rangle \Downarrow_{exp} \langle n_0+n_1, \sigma'' \rangle}
+\end{prooftree}
+\end{center}
+
+\begin{center}
+\begin{prooftree}
+    \hypo{\langle e_0,\sigma \rangle \Downarrow_{exp} \langle n_0,\sigma' \rangle}
+    \hypo{\langle e_1,\sigma' \rangle \Downarrow_{exp} \langle n_1,\sigma'' \rangle}
+    \infer2[BMINUS]{\langle e_0-e_1,\sigma \rangle \Downarrow_{exp} \langle n_0-n_1, \sigma'' \rangle}
+\end{prooftree}
+\end{center}
+
+\begin{center}
+\begin{prooftree}
+    \hypo{\langle e_0,\sigma \rangle \Downarrow_{exp} \langle n_0,\sigma' \rangle}
+    \hypo{\langle e_1,\sigma' \rangle \Downarrow_{exp} \langle n_1,\sigma'' \rangle}
+    \infer2[MULT]{\langle e_0*e_1,\sigma \rangle \Downarrow_{exp} \langle n_0*n_1, \sigma'' \rangle}
+\end{prooftree}
+\end{center}
+
+\begin{center}
+\begin{prooftree}
+    \hypo{\langle e_0,\sigma \rangle \Downarrow_{exp} \langle n_0,\sigma' \rangle}
+    \hypo{\langle e_1,\sigma' \rangle \Downarrow_{exp} \langle n_1,\sigma'' \rangle}
+    \hypo{n_1 \not = 0}
+    \infer3[DIV]{\langle e_0\div e_1,\sigma \rangle \Downarrow_{exp} \langle n_0\div n_1, \sigma'' \rangle}
+\end{prooftree}
+\end{center}
+
+\begin{center}
+\begin{prooftree}
+    \hypo{\langle e_0,\sigma \rangle \Downarrow_{exp} \langle n_0,\sigma' \rangle}
+    \hypo{\langle e_1,\sigma' \rangle \Downarrow_{exp} \langle n_1,\sigma'' \rangle}
+    \infer2[GT]{\langle e_0 > e_1,\sigma \rangle \Downarrow_{exp} \langle n_0 > n_1, \sigma'' \rangle}
+\end{prooftree}
+\end{center}
+
+\begin{center}
+\begin{prooftree}
+    \hypo{\langle e_0,\sigma \rangle \Downarrow_{exp} \langle n_0,\sigma' \rangle}
+    \hypo{\langle e_1,\sigma' \rangle \Downarrow_{exp} \langle n_1,\sigma'' \rangle}
+    \infer2[LT]{\langle e_0 < e_1,\sigma \rangle \Downarrow_{exp} \langle n_0 < n_1, \sigma'' \rangle}
+\end{prooftree}
+\end{center}
+
+\begin{center}
+\begin{prooftree}
+    \hypo{\langle e_0,\sigma \rangle \Downarrow_{exp} \langle n_0,\sigma' \rangle}
+    \hypo{\langle e_1,\sigma' \rangle \Downarrow_{exp} \langle n_1,\sigma'' \rangle}
+    \infer2[NOTEQ]{\langle e_0 \mathrel{\mathtt{!=}} e_1,\sigma \rangle \Downarrow_{exp} \langle n_0 \neq n_1, \sigma'' \rangle}
+\end{prooftree}
+\end{center}
+
+\begin{center}
+\begin{prooftree}
+    \hypo{\langle e_0,\sigma \rangle \Downarrow_{exp} \langle n_0,\sigma' \rangle}
+    \hypo{\langle e_1,\sigma' \rangle \Downarrow_{exp} \langle n_1,\sigma'' \rangle}
+    \infer2[EQ]{\langle e_0 == e_1,\sigma \rangle \Downarrow_{exp} \langle n_0 = n_1, \sigma'' \rangle}
+\end{prooftree}
+\hspace{1cm}
+\begin{prooftree}
+    \hypo{}
+    \infer1[BVAL]{\langle bv,\sigma \rangle \Downarrow_{exp} \langle bv,\sigma \rangle}
+\end{prooftree}
+\end{center}
+
+\begin{center}
+\begin{prooftree}
+    \hypo{\langle p,\sigma \rangle \Downarrow_{exp} \langle b,\sigma' \rangle}
+    \infer1[NOT]{\langle \lnot p,\sigma \rangle \Downarrow_{exp} \langle \lnot b, \sigma' \rangle}
+\end{prooftree}
+\hspace{1cm}
+\begin{prooftree}
+    \hypo{\langle p_0,\sigma \rangle \Downarrow_{exp} \langle b_0,\sigma' \rangle}
+    \hypo{\langle p_1,\sigma' \rangle \Downarrow_{exp} \langle b_1,\sigma'' \rangle}
+    \infer2[OR]{\langle e_0 \lor e_1,\sigma \rangle \Downarrow_{exp} \langle b_0 \lor b_1, \sigma'' \rangle}
+\end{prooftree}
+\end{center}
+
+\begin{center}
+\begin{prooftree}
+    \hypo{\langle p_0,\sigma \rangle \Downarrow_{exp} \langle b_0,\sigma' \rangle}
+    \hypo{\langle p_1,\sigma' \rangle \Downarrow_{exp} \langle b_1,\sigma'' \rangle}
+    \infer2[AND]{\langle e_0 \land e_1,\sigma \rangle \Downarrow_{exp} \langle b_0 \land b_1, \sigma'' \rangle}
+\end{prooftree}
+\end{center}
+
+Llamamos IASS a la asignaci\'on como expresi\'on y ISEQ a la secuencializaci\'on de expresiones con el operador \textbf{,}
+
+\begin{center}
+\begin{prooftree}
+    \hypo{\langle e,\sigma \rangle \Downarrow_{exp} \langle n,\sigma' \rangle}
+    \infer1[IASS]{\langle v=e, \sigma \rangle \Downarrow_{exp} \langle n, [\sigma' | v: n] \rangle}
+\end{prooftree}
+\end{center}
+
+\begin{center}
+\begin{prooftree}
+    \hypo{\langle e_0,\sigma \rangle \Downarrow_{exp} \langle n_0,\sigma' \rangle}
+    \hypo{\langle e_1,\sigma' \rangle \Downarrow_{exp} \langle n_1,\sigma'' \rangle}
+    \infer2[ISEQ]{\langle e_0,e_1,\sigma \rangle \Downarrow_{exp} \langle n_1, \sigma'' \rangle}
+\end{prooftree}
+\end{center}
+
+\section*{Ejercicio 5}
+
+\subsection*{Determinismo de la relaci\'on de evaluaci\'on en un paso $\rightsquigarrow$}
+
+\section*{Ejercicio 10}
+
+\subsection*{Nueva gram\'atica abstracta}
+for (intexp;boolexp;intexp) comm
+
+\subsection*{Nueva sem\'antica operacional para comandos}
+
+\begin{center}
+\begin{prooftree}
+    \hypo{\langle e,\sigma \rangle \Downarrow_{exp} \langle n,\sigma' \rangle}
+    \infer1[ASS]{\langle v=e, \sigma \rangle \rightsquigarrow \langle \textbf{skip}, [\sigma' | v: n] \rangle}
+\end{prooftree}
+
+\begin{prooftree}
+    \hypo{}
+    \infer1[SEQ1]{\langle \textbf{skip}; c_1, \sigma \rangle \rightsquigarrow \langle c_1, \sigma \rangle}
+\end{prooftree}
+
+\begin{prooftree}
+    \hypo{\langle c_0, \sigma \rangle \rightsquigarrow \langle c'_0, \sigma' \rangle}
+    \infer1[SEQ2]{\langle \textbf{skip}; c_1, \sigma \rangle \rightsquigarrow \langle c'_0; c_1, \sigma' \rangle}
+\end{prooftree}
+
+\begin{prooftree}
+    \hypo{\langle b, \sigma \rangle \Downarrow_{exp} \langle \textbf{true}, \sigma' \rangle}
+    \infer1[IF_1]{\langle \textbf{if}\ b \ \textbf{then} \ c_0 \ \textbf{else} \ c_1, \sigma \rangle \rightsquigarrow \langle c_0, \sigma' \rangle}
+\end{prooftree}
+\hspace{1cm}
+\begin{prooftree}
+    \hypo{\langle b, \sigma \rangle \Downarrow_{exp} \langle \textbf{false}, \sigma' \rangle}
+    \infer1[IF_2]{\langle \textbf{if}\ b \ \textbf{then} \ c_0 \ \textbf{else} \ c_1, \sigma \rangle \rightsquigarrow \langle c_1, \sigma' \rangle}
+\end{prooftree}
+\vspace{0.25cm}
+
+\begin{prooftree}
+    \hypo{}
+    \infer1[REPEAT_1]{\langle \textbf{repeat} \ c \ \textbf{until} \ b, \sigma \rangle \rightsquigarrow \langle c; \textbf{if} \ b \ \textbf{then skip else repeat} \ b \ \textbf{until} \ c, \sigma \rangle}
+\end{prooftree}
+
+\begin{prooftree}
+    \hypo{\langle e, \sigma \rangle \Downarrow_{exp} \langle n, \sigma' \rangle}
+    \infer1[REPEAT_2]{\langle \textbf{repeat}\ (c; e) \ \textbf{until} \ b, \sigma \rangle \rightsquigarrow }
+\end{prooftree}
+
+\begin{prooftree}
+    \hypo{\langle e_1, \sigma \rangle \Downarrow_{exp} \langle n_1, \sigma' \rangle}
+    \infer1[FOR]{\langle \textbf{for} \ (e_1;e_2;e_3) \ c, \sigma \rangle \rightsquigarrow \langle \textbf{repeat}\ (c; e_3) \ \textbf{until} \ e_2, \sigma' \rangle}
+\end{prooftree}
+    
+    
+\end{center}
 
 \end{document}
