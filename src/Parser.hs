@@ -37,12 +37,10 @@ lis = makeTokenParser
                         , "=="
                         , "!="
                         , ";"
-                        , ","
-                        , "{"
-                        , "}" -- van aca agregados los corchetes para parsearlos??
+                        , "," -- van aca agregados los corchetes para parsearlos?? NO
                         ]
-    , identStart      = letter <|> char '_'
-    , identLetter     = alphaNum <|> char '_'
+    -- , identStart      = letter <|> char '_'
+    -- , identLetter     = alphaNum <|> char '_'
     }
   )
 -- Hay que completar todas las definiciones que faltan dentro del lis?
@@ -68,7 +66,7 @@ intexp1 = try chainl1 intexp (do{ reservedOp lis ","; return ESeq })
              e <- intexp
              return (UMinus e)
           <|>
-          do y <- integer -- con que parser enteros???
+          do y <- natural
              return (Const y)
           <|>
           do z <- identifier lis
@@ -110,11 +108,6 @@ boolexp = parens lis boolexp <|> boolexp1
 -----------------------------------
 --- Parser de comandos
 -----------------------------------
-
--- orden de precedencia??
--- como parseamos el dangling else
--- que onda con los if anidados
-       
 
 comm :: Parser Comm
 comm = try chainl1 comm (do{ reservedOp lis ";"; return Seq })

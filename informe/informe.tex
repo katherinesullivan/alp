@@ -13,8 +13,18 @@
 \usepackage{wrapfig}
 
 
+% to rotate content 90 degrees
+\usepackage{lscape}
+
+% to define deriving trees
+% \usepackage{ebproof}
+\usepackage{prftree}
+
 % to set spacing between lines
 \usepackage{setspace}
+
+% defining command for the curly arrow
+\newcommand{\curly}{\mathrel{\leadsto}}
 
 
 \usepackage{mathtools}
@@ -77,7 +87,7 @@
 
 \section*{Ejercicio 1}
 
-\subsection{Gramática Abstracta}
+\subsection*{Gramática Abstracta}
 
 \begin{align*}
     intexp\ ::=\ & nat\ |\ var\ |\ -_u\ intexp \\
@@ -86,23 +96,176 @@
             |\ \ & intexp\ \times\ intexp \\ 
             |\ \ & intexp\ \div\ intexp \\ 
             |\ \ & var\ =\ intexp \\
-            |\ \ & intexp\ ,\ intexp
+            |\ \ & intexp\ ,\ intexp \\
+    boolexp\ ::=\ & \textbf{true}\ |\ \textbf{false} \\
+             |\ \ & intexp\ ==\ intexp \\
+             |\ \ & intexp\ \ne\ intexp \\
+             |\ \ & intexp\ <\ intexp \\
+             |\ \ & intexp\ >\ intexp \\
+             |\ \ & boolexp\ \wedge\ boolexp \\
+             |\ \ & boolexp\ \vee\ boolexp \\
+             |\ \ & \neg\ boolexp \\
+    comm\ :=\ & \textbf{skip} \\
+          |\ \ & var = intexp \\
+          |\ \ & comm;\ comm \\
+          |\ \ & \textbf{if}\ boolexp\ \textbf{then}\ comm\ \textbf{else}\ comm \\
+          |\ \ & \textbf{repeat}\ comm\ \textbf{until}\ boolexp
 \end{align*}
 
-\subsection{Gramática Concreta}
+\subsection*{Gramática Concreta}
+
+Estan mal algunos simbolos
 
 \begin{align*}
+    digit\ ::=\ & \textbf{`0'}\ |\ \textbf{`1'}\ |\ \dots\ |\ \textbf{`9'} \\
+    letter\ ::=\ & \textbf{`a'}\ |\ \dots\ |\ \textbf{`Z'} \\
+    nat\ ::=\ & digit\ |\ digit\ nat \\
+    var\ ::=\ & letter\ |\ letter\ var \\
     intexp\ ::=\ & nat \\
             |\ \ & var \\
-            |\ \ & \textbf{`-`}\ intexp \\
-            |\ \ & intexp\ \textbf{`+`}\ intexp \\ 
-            |\ \ & intexp\ \textbf{`-`}\ intexp \\ 
-            |\ \ & intexp\ \textbf{`*`}\ intexp \\ 
-            |\ \ & intexp\ \textbf{`/`}\ intexp \\ 
-            |\ \ & \textbf{`(`}\ intexp\ \textbf{`)`} \\
-            |\ \ & var\ \textbf{`=`}\ intexp \\
-            |\ \ & intexp\ \textbf{`,`}\ intexp
+            |\ \ & \textbf{`-'}\ intexp \\
+            |\ \ & intexp\ \textbf{`+'}\ intexp \\ 
+            |\ \ & intexp\ \textbf{`-'}\ intexp \\ 
+            |\ \ & intexp\ \textbf{`*'}\ intexp \\ 
+            |\ \ & intexp\ \textbf{`/'}\ intexp \\ 
+            |\ \ & \textbf{`('}\ intexp\ \textbf{`)'} \\
+            |\ \ & var\ \textbf{`='}\ intexp \\
+            |\ \ & intexp\ \textbf{`,'}\ intexp \\
+    boolexp\ ::=\ & \textbf{`true'}\ |\ \textbf{`false'} \\
+             |\ \ & intexp\ \textbf{`=='}\ intexp \\
+             |\ \ & intexp\ \textbf{`!='}\ intexp \\
+             |\ \ & intexp\ \textbf{`<'}\ intexp \\
+             |\ \ & intexp\ \textbf{`>'}\ intexp \\
+             |\ \ & boolexp\ \textbf{`\&\&'}\ boolexp \\
+             |\ \ & boolexp\ \textbf{`||'}\ boolexp \\
+             |\ \ & \textbf{`!'}\ boolexp \\
+             |\ \ & \textbf{`('}\ boolexp\ \textbf{`)'} \\
+    comm\ :=\ & \textbf{\emph{skip}} \\
+          |\ \ & var\ \textbf{`='}\ intexp \\
+          |\ \ & comm\ \textbf{`;'}\ comm \\
+          |\ \ & \textbf{`if'}\ boolexp\ \textbf{`\{'}\ comm\ \textbf{`\}'} \\
+          |\ \ & \textbf{`if'}\ boolexp\ \textbf{`\{'}\ comm\ \textbf{`\}' `else' `\{'}\ comm \\
+          |\ \ & \textbf{`repeat'}\ comm\ \textbf{`until'}\ boolexp\ \textbf{`end'}
 \end{align*}
+
+
+\section*{Ejercicio 6}
+
+Habria que enunciar las nuevas reglas (ejercicio 4) y cambiar el nombre aca, y enunciar las reglas de la clausura transitiva.
+
+\begin{landscape}
+
+
+\textbf{A:}
+
+\begin{displaymath}
+    \prftree[r]{$\mathrm{T_1}$}{
+        \prftree[r]{$\mathrm{SEQ_1}$}
+        {\langle \textbf{skip}; \textbf{repeat}\ x=x-y\ \textbf{until}\ x==0,\ [[\sigma|x:1]|y:1] \rangle \curly \langle \textbf{repeat}\ x=x-y\ \textbf{until}\ x==0,\ [[\sigma|x:1]|y:1] \rangle}
+    }
+    {\langle \textbf{skip}; \textbf{repeat}\ x=x-y\ \textbf{until}\ x==0,\ [[\sigma|x:1]|y:1] \rangle \curly^* \langle \textbf{repeat}\ x=x-y\ \textbf{until}\ x==0,\ [[\sigma|x:1]|y:1] \rangle}
+\end{displaymath}
+
+\textbf{B:}
+
+\begin{displaymath}
+    \prftree[r]{$\mathrm{T_1}$}{
+        \prftree[r]{$\mathrm{REPEAT}$}
+        {\langle \textbf{repeat}\ x=x-y\ \textbf{until}\ x==0,\ [[\sigma|x:1]|y:1] \rangle \curly \langle x=x-y; \textbf{if}\ x==0\ \textbf{then\ skip\ else\ repeat}\ x=x-y\ \textbf{until}\ x==0,\ [[\sigma|x:1]|y:1] \rangle}
+    }
+    {\langle \textbf{repeat}\ x=x-y\ \textbf{until}\ x==0,\ [[\sigma|x:1]|y:1] \rangle \curly^* \langle x=x-y; \textbf{if}\ x==0\ \textbf{then\ skip\ else\ repeat}\ x=x-y\ \textbf{until}\ x==0,\ [[\sigma|x:1]|y:1] \rangle}
+\end{displaymath}
+
+\textbf{C:}
+
+\begin{displaymath}
+    \prftree[r]{$\mathrm{T_1}$}{
+        \prftree[r]{$\mathrm{SEQ_2}$}{
+            \prftree[r]{$\mathrm{ASS}$}{
+                \prftree[r]{$\mathrm{MINUS}$}{
+                    \prftree[r]{$\mathrm{VAR}$}
+                    {\langle x,\ [[\sigma|x:1]|y:1] \rangle \Downarrow_{exp} \langle \textbf{1},\ [[\sigma|x:1]|y:1] \rangle}
+                }{
+                    \prftree[r]{$\mathrm{VAR}$}
+                    {\langle y,\ [[\sigma|x:1]|y:1] \rangle \Downarrow_{exp} \langle \textbf{1},\ [[\sigma|x:1]|y:1] \rangle}  
+                }
+                {\langle x-y,\ [[\sigma|x:1]|y:1] \rangle \Downarrow_{exp} \langle \textbf{0},\ [[\sigma|x:1]|y:1] \rangle}
+            }
+            {\langle x=x-y,\ [[\sigma|x:1]|y:1] \rangle \curly \langle \textbf{skip},\ [[\sigma|x:0]|y:1] \rangle}
+        }
+        {\langle x=x-y; \textbf{if}\ x==0\ \textbf{then\ skip\ else\ repeat}\ x=x-y\ \textbf{until}\ x==0,\ [[\sigma|x:1]|y:1] \rangle \curly \langle \textbf{skip}; \textbf{if}\ x==0\ \textbf{then\ skip\ else\ repeat}\ x=x-y\ \textbf{until}\ x==0,\ [[\sigma|x:0]|y:1] \rangle}
+    }
+    {\langle x=x-y; \textbf{if}\ x==0\ \textbf{then\ skip\ else\ repeat}\ x=x-y\ \textbf{until}\ x==0,\ [[\sigma|x:1]|y:1] \rangle \curly^* \langle \textbf{skip}; \textbf{if}\ x==0\ \textbf{then\ skip\ else\ repeat}\ x=x-y\ \textbf{until}\ x==0,\ [[\sigma|x:0]|y:1] \rangle}
+\end{displaymath}
+
+\textbf{D:}
+
+\begin{displaymath}
+    \prftree[r]{$\mathrm{T_1}$}{
+        \prftree[r]{$\mathrm{SEQ_2}$}{
+            \prftree[r]{$\mathrm{ASS}$}{
+                \prftree[r]{$\mathrm{NASS}$}{
+                    \prftree[r]{$\mathrm{NVAL}$}
+                    {\langle 1,\ [[\sigma|x:2]|y:2] \rangle \Downarrow_{exp} \langle \textbf{1} ,\ [[\sigma|x:2]|y:2] \rangle}
+                }
+                {\langle y=1,\ [[\sigma|x:2]|y:2] \rangle \Downarrow_{exp} \langle \textbf{1} ,\ [[\sigma|x:2]|y:1] \rangle}
+            }
+            {\langle x=y=1,\ [[\sigma|x:2]|y:2] \rangle \curly \langle \textbf{skip} ,\ [[\sigma|x:1]|y:1] \rangle}
+        }
+        {\langle x=y=1; \textbf{repeat}\ x=x-y\ \textbf{until}\ x==0,\ [[\sigma|x:2]|y:2] \rangle \curly \langle \textbf{skip}; \textbf{repeat}\ x=x-y\ \textbf{until}\ x==0,\ [[\sigma|x:1]|y:1] \rangle}
+    }
+    {\langle x=y=1; \textbf{repeat}\ x=x-y\ \textbf{until}\ x==0,\ [[\sigma|x:2]|y:2] \rangle \curly^* \langle \textbf{skip}; \textbf{repeat}\ x=x-y\ \textbf{until}\ x==0,\ [[\sigma|x:1]|y:1] \rangle}
+\end{displaymath}
+
+\textbf{E:}
+
+\begin{displaymath}
+    \prftree[r]{$\mathrm{T_1}$}{
+        \prftree[r]{$\mathrm{SEQ_1}$}
+        {\langle \textbf{skip}; \textbf{if}\ x==0\ \textbf{then\ skip\ else\ repeat}\ x=x-y\ \textbf{until}\ x==0,\ [[\sigma|x:0]|y:1] \rangle \curly \langle \textbf{if}\ x==0\ \textbf{then\ skip\ else\ repeat}\ x=x-y\ \textbf{until}\ x==0,\ [[\sigma|x:0]|y:1] \rangle}
+    }
+    {\langle \textbf{skip}; \textbf{if}\ x==0\ \textbf{then\ skip\ else\ repeat}\ x=x-y\ \textbf{until}\ x==0,\ [[\sigma|x:0]|y:1] \rangle \curly^* \langle \textbf{if}\ x==0\ \textbf{then\ skip\ else\ repeat}\ x=x-y\ \textbf{until}\ x==0,\ [[\sigma|x:0]|y:1] \rangle}
+\end{displaymath}
+
+\textbf{F:}
+
+\begin{displaymath}
+    \prftree[r]{$\mathrm{T_1}$}{
+        \prftree[r]{$\mathrm{IF_1}$}{
+            \prftree[r]{$\mathrm{EQ}$}{
+                \prftree[r]{$\mathrm{VAR}$}
+                {\langle x,\ [[\sigma|x:0]|y:1] \rangle \Downarrow_{exp} \langle \textbf{0},\ [[\sigma|x:0]|y:1] \rangle}
+            }{
+                \prftree[r]{$\mathrm{NVAL}$}
+                {\langle 0,\ [[\sigma|x:0]|y:1] \rangle \Downarrow_{exp} \langle \textbf{0},\ [[\sigma|x:0]|y:1] \rangle}
+            }
+            {\langle x==0,\ [[\sigma|x:0]|y:1] \rangle \Downarrow_{exp} \langle \textbf{true},\ [[\sigma|x:0]|y:1] \rangle}
+        }
+        {\langle \textbf{if}\ x==0\ \textbf{then\ skip\ else\ repeat}\ x=x-y\ \textbf{until}\ x==0,\ [[\sigma|x:0]|y:1] \rangle \curly \langle \textbf{skip},\ [[\sigma|x:0]|y:1] \rangle}
+    }
+    {\langle \textbf{if}\ x==0\ \textbf{then\ skip\ else\ repeat}\ x=x-y\ \textbf{until}\ x==0,\ [[\sigma|x:0]|y:1] \rangle \curly^* \langle \textbf{skip},\ [[\sigma|x:0]|y:1] \rangle}
+\end{displaymath}
+
+\textbf{DEM:}
+
+\begin{displaymath}
+    \prftree[r]{$\mathrm{T_2}$}{
+        \prftree[r]{$\mathrm{T_2}$}{
+            \prftree[r]{$\mathrm{T_2}$}{
+                \prftree[r]{$\mathrm{T_2}$}{
+                    \prftree[r]{$\mathrm{T_2}$}{D}{A}
+                    {\langle x=y=1; \textbf{repeat}\ x=x-y\ \textbf{until}\ x==0,\ [[\sigma|x:2]|y:2] \rangle \curly^* \langle \textbf{repeat}\ x=x-y\ \textbf{until}\ x==0,\ [[\sigma|x:1]|y:1] \rangle}
+                }{B}
+                {\langle x=y=1; \textbf{repeat}\ x=x-y\ \textbf{until}\ x==0,\ [[\sigma|x:2]|y:2] \rangle \curly^* \langle x=x-y; \textbf{if}\ x==0\ \textbf{then\ skip\ else\ repeat}\ x=x-y\ \textbf{until}\ x==0,\ [[\sigma|x:1]|y:1] \rangle}
+            }{C}
+            {\langle x=y=1; \textbf{repeat}\ x=x-y\ \textbf{until}\ x==0,\ [[\sigma|x:2]|y:2] \rangle \curly^* \langle \textbf{skip}; \textbf{if}\ x==0\ \textbf{then\ skip\ else\ repeat}\ x=x-y\ \textbf{until}\ x==0,\ [[\sigma|x:0]|y:1] \rangle}
+        }{E}
+        {\langle x=y=1; \textbf{repeat}\ x=x-y\ \textbf{until}\ x==0,\ [[\sigma|x:2]|y:2] \rangle \curly^* \langle \textbf{if}\ x==0\ \textbf{then\ skip\ else\ repeat}\ x=x-y\ \textbf{until}\ x==0,\ [[\sigma|x:0]|y:1] \rangle}
+    }{F}
+    {\langle x=y=1; \textbf{repeat}\ x=x-y\ \textbf{until}\ x==0,\ [[\sigma|x:2]|y:2] \rangle \curly^* \langle \textbf{skip},\ [[\sigma|x:0]|y:1] \rangle}
+\end{displaymath}
+\end{landscape}
+
 
 
 \end{document}

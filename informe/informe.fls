@@ -64,6 +64,10 @@ INPUT /usr/local/texlive/2020/texmf-dist/tex/generic/kvsetkeys/kvsetkeys.sty
 INPUT /usr/local/texlive/2020/texmf-dist/tex/generic/kvsetkeys/kvsetkeys.sty
 INPUT /usr/local/texlive/2020/texmf-dist/tex/latex/wrapfig/wrapfig.sty
 INPUT /usr/local/texlive/2020/texmf-dist/tex/latex/wrapfig/wrapfig.sty
+INPUT /usr/local/texlive/2020/texmf-dist/tex/latex/graphics/lscape.sty
+INPUT /usr/local/texlive/2020/texmf-dist/tex/latex/graphics/lscape.sty
+INPUT /usr/local/texlive/2020/texmf-dist/tex/latex/prftree/prftree.sty
+INPUT /usr/local/texlive/2020/texmf-dist/tex/latex/prftree/prftree.sty
 INPUT /usr/local/texlive/2020/texmf-dist/tex/latex/setspace/setspace.sty
 INPUT /usr/local/texlive/2020/texmf-dist/tex/latex/setspace/setspace.sty
 INPUT /usr/local/texlive/2020/texmf-dist/tex/latex/mathtools/mathtools.sty
@@ -130,11 +134,24 @@ INPUT /usr/local/texlive/2020/texmf-dist/fonts/tfm/public/rsfs/rsfs10.tfm
 INPUT /usr/local/texlive/2020/texmf-dist/fonts/tfm/public/rsfs/rsfs5.tfm
 INPUT /usr/local/texlive/2020/texmf-dist/fonts/tfm/public/cm/cmbx8.tfm
 INPUT /usr/local/texlive/2020/texmf-dist/fonts/tfm/public/cm/cmbx6.tfm
+INPUT /usr/local/texlive/2020/texmf-dist/fonts/tfm/public/cm/cmbxti10.tfm
+INPUT /usr/local/texlive/2020/texmf-dist/fonts/tfm/public/cm/cmbxti10.tfm
+INPUT /usr/local/texlive/2020/texmf-dist/fonts/tfm/public/cm/cmbxti10.tfm
+INPUT /usr/local/texlive/2020/texmf-dist/tex/latex/base/omscmr.fd
+INPUT /usr/local/texlive/2020/texmf-dist/tex/latex/base/omscmr.fd
+INPUT /usr/local/texlive/2020/texmf-dist/fonts/tfm/public/cm/cmbsy10.tfm
+INPUT /usr/local/texlive/2020/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmbsy8.tfm
+INPUT /usr/local/texlive/2020/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmbsy6.tfm
 INPUT /Users/inescipullo/Documents2.0/Analisis de Lenguajes de Programacion/alp/informe/informe.aux
+INPUT /usr/local/texlive/2020/texmf-dist/fonts/type1/public/amsfonts/cm/cmbsy10.pfb
 INPUT /usr/local/texlive/2020/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb
 INPUT /usr/local/texlive/2020/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb
+INPUT /usr/local/texlive/2020/texmf-dist/fonts/type1/public/amsfonts/cm/cmbxti10.pfb
 INPUT /usr/local/texlive/2020/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb
 INPUT /usr/local/texlive/2020/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb
 INPUT /usr/local/texlive/2020/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb
 INPUT /usr/local/texlive/2020/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb
+INPUT /usr/local/texlive/2020/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb
 INPUT /usr/local/texlive/2020/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb
+INPUT /usr/local/texlive/2020/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb
+INPUT /usr/local/texlive/2020/texmf-dist/fonts/type1/public/amsfonts/symbols/msam10.pfb
