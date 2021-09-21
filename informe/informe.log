@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020) (preloaded format=pdflatex 2020.4.17)  20 SEP 2021 15:46
+This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020) (preloaded format=pdflatex 2020.4.17)  20 SEP 2021 20:35
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -172,51 +172,117 @@ LaTeX Info: Redefining \pageref on input line 356.
 \WF@box=\box47
 \WF@everypar=\toks24
 Package: wrapfig 2003/01/31  v 3.6
+) (/usr/local/texlive/2020/texmf-dist/tex/latex/ebproof/ebproof.sty (/usr/local/texlive/2020/texmf-dist/tex/latex/l3kernel/expl3.sty
+Package: expl3 2020-03-06 L3 programming layer (loader) 
+ (/usr/local/texlive/2020/texmf-dist/tex/latex/l3backend/l3backend-pdfmode.def
+File: l3backend-pdfmode.def 2020-03-12 L3 backend support: PDF mode
+\l__kernel_color_stack_int=\count190
+\l__pdf_internal_box=\box48
+)) (/usr/local/texlive/2020/texmf-dist/tex/latex/l3packages/xparse/xparse.sty
+Package: xparse 2020-03-06 L3 Experimental document command parser
+\l__xparse_current_arg_int=\count191
+\g__xparse_grabber_int=\count192
+\l__xparse_m_args_int=\count193
+\l__xparse_v_nesting_int=\count194
+)
+Package: ebproof 2017/05/17 v2.0 EB's proof trees
+\l_ebproof_separation_dim=\dimen148
+\l_ebproof_rule_margin_dim=\dimen149
+\l_ebproof_rule_thickness_dim=\dimen150
+\l_ebproof_rule_separation_dim=\dimen151
+\l_ebproof_rule_dash_length_dim=\dimen152
+\l_ebproof_rule_dash_space_dim=\dimen153
+\l_ebproof_label_separation_dim=\dimen154
+\l_ebproof_label_axis_dim=\dimen155
+\l_ebproof_transit_dim=\dimen156
+\g_ebproof_level_int=\count195
+\g_ebproof_stack_box=\box49
+\l_ebproof_a_box=\box50
+\l_ebproof_b_box=\box51
+\l_ebproof_c_box=\box52
+\l_ebproof_d_box=\box53
+) (/usr/local/texlive/2020/texmf-dist/tex/latex/listings/listings.sty
+\lst@mode=\count196
+\lst@gtempboxa=\box54
+\lst@token=\toks25
+\lst@length=\count197
+\lst@currlwidth=\dimen157
+\lst@column=\count198
+\lst@pos=\count199
+\lst@lostspace=\dimen158
+\lst@width=\dimen159
+\lst@newlines=\count266
+\lst@lineno=\count267
+\lst@maxwidth=\dimen160
+ (/usr/local/texlive/2020/texmf-dist/tex/latex/listings/lstmisc.sty
+File: lstmisc.sty 2020/03/24 1.8d (Carsten Heinz)
+\c@lstnumber=\count268
+\lst@skipnumbers=\count269
+\lst@framebox=\box55
+) (/usr/local/texlive/2020/texmf-dist/tex/latex/listings/listings.cfg
+File: listings.cfg 2020/03/24 1.8d listings configuration
+))
+Package: listings 2020/03/24 1.8d (Carsten Heinz)
+ (/usr/local/texlive/2020/texmf-dist/tex/latex/xcolor/xcolor.sty
+Package: xcolor 2016/05/11 v2.12 LaTeX color extensions (UK)
+ (/usr/local/texlive/2020/texmf-dist/tex/latex/graphics-cfg/color.cfg
+File: color.cfg 2016/01/02 v1.6 sample color configuration
+)
+Package xcolor Info: Driver file: pdftex.def on input line 225.
+Package xcolor Info: Model `cmy' substituted by `cmy0' on input line 1348.
+Package xcolor Info: Model `hsb' substituted by `rgb' on input line 1352.
+Package xcolor Info: Model `RGB' extended on input line 1364.
+Package xcolor Info: Model `HTML' substituted by `rgb' on input line 1366.
+Package xcolor Info: Model `Hsb' substituted by `hsb' on input line 1367.
+Package xcolor Info: Model `tHsb' substituted by `hsb' on input line 1368.
+Package xcolor Info: Model `HSB' substituted by `hsb' on input line 1369.
+Package xcolor Info: Model `Gray' substituted by `gray' on input line 1370.
+Package xcolor Info: Model `wave' substituted by `hsb' on input line 1371.
+) (/usr/local/texlive/2020/texmf-dist/tex/latex/setspace/setspace.sty
+Package: setspace 2011/12/19 v6.7a set line spacing
 ) (/usr/local/texlive/2020/texmf-dist/tex/latex/graphics/lscape.sty
 Package: lscape 2000/10/22 v3.01 Landscape Pages (DPC)
 ) (/usr/local/texlive/2020/texmf-dist/tex/latex/prftree/prftree.sty
 Package: prftree 2019/06/19 Natural Deduction Proofs
-\prflinepadbefore=\dimen148
-\prflinepadafter=\dimen149
-\prflineextra=\dimen150
-\prflinethickness=\dimen151
-\prfemptylinethickness=\dimen152
-\prfrulenameskip=\dimen153
-\prflabelskip=\dimen154
-\prfinterspace=\dimen155
-\prfdoublelineinterspace=\dimen156
-\prfboundedstyle=\count190
-\prfsummarystyle=\count191
-\prf@@fancysummarybox=\box48
-\prf@@fancysymmarylen=\dimen157
+\prflinepadbefore=\dimen161
+\prflinepadafter=\dimen162
+\prflineextra=\dimen163
+\prflinethickness=\dimen164
+\prfemptylinethickness=\dimen165
+\prfrulenameskip=\dimen166
+\prflabelskip=\dimen167
+\prfinterspace=\dimen168
+\prfdoublelineinterspace=\dimen169
+\prfboundedstyle=\count270
+\prfsummarystyle=\count271
+\prf@@fancysummarybox=\box56
+\prf@@fancysymmarylen=\dimen170
 \prf@Lassum=\skip77
 \prf@Rassum=\skip78
-\prf@assumptionsbox=\box49
-\prf@conclusionbox=\box50
-\prf@rulenamebox=\box51
-\prf@labelbox=\box52
-\prf@linebox=\box53
-\prf@summarybox=\box54
-\prf@fancybox=\box55
-\c@prfassumptioncounter=\count192
-\c@prfsummarycounter=\count193
-\prf@summary@label=\box56
-\prf@@@@proofbox=\box57
-) (/usr/local/texlive/2020/texmf-dist/tex/latex/setspace/setspace.sty
-Package: setspace 2011/12/19 v6.7a set line spacing
+\prf@assumptionsbox=\box57
+\prf@conclusionbox=\box58
+\prf@rulenamebox=\box59
+\prf@labelbox=\box60
+\prf@linebox=\box61
+\prf@summarybox=\box62
+\prf@fancybox=\box63
+\c@prfassumptioncounter=\count272
+\c@prfsummarycounter=\count273
+\prf@summary@label=\box64
+\prf@@@@proofbox=\box65
 ) (/usr/local/texlive/2020/texmf-dist/tex/latex/mathtools/mathtools.sty
 Package: mathtools 2020/03/24 v1.24 mathematical typesetting tools
  (/usr/local/texlive/2020/texmf-dist/tex/latex/tools/calc.sty
 Package: calc 2017/05/25 v4.3 Infix arithmetic (KKT,FJ)
-\calc@Acount=\count194
-\calc@Bcount=\count195
-\calc@Adimen=\dimen158
-\calc@Bdimen=\dimen159
+\calc@Acount=\count274
+\calc@Bcount=\count275
+\calc@Adimen=\dimen171
+\calc@Bdimen=\dimen172
 \calc@Askip=\skip79
 \calc@Bskip=\skip80
 LaTeX Info: Redefining \setlength on input line 80.
 LaTeX Info: Redefining \addtolength on input line 81.
-\calc@Ccount=\count196
+\calc@Ccount=\count276
 \calc@Cskip=\skip81
 ) (/usr/local/texlive/2020/texmf-dist/tex/latex/mathtools/mhsetup.sty
 Package: mhsetup 2017/03/31 v1.3 programming setup (MH)
@@ -225,29 +291,17 @@ LaTeX Info: Thecontrolsequence`\('isalreadyrobust on input line 130.
 LaTeX Info: Thecontrolsequence`\)'isalreadyrobust on input line 130.
 LaTeX Info: Thecontrolsequence`\['isalreadyrobust on input line 130.
 LaTeX Info: Thecontrolsequence`\]'isalreadyrobust on input line 130.
-\g_MT_multlinerow_int=\count197
-\l_MT_multwidth_dim=\dimen160
+\g_MT_multlinerow_int=\count277
+\l_MT_multwidth_dim=\dimen173
 \origjot=\skip82
-\l_MT_shortvdotswithinadjustabove_dim=\dimen161
-\l_MT_shortvdotswithinadjustbelow_dim=\dimen162
-\l_MT_above_intertext_sep=\dimen163
-\l_MT_below_intertext_sep=\dimen164
-\l_MT_above_shortintertext_sep=\dimen165
-\l_MT_below_shortintertext_sep=\dimen166
-\xmathstrut@box=\box58
-\xmathstrut@dim=\dimen167
-) (/usr/local/texlive/2020/texmf-dist/tex/latex/l3packages/xparse/xparse.sty (/usr/local/texlive/2020/texmf-dist/tex/latex/l3kernel/expl3.sty
-Package: expl3 2020-03-06 L3 programming layer (loader) 
- (/usr/local/texlive/2020/texmf-dist/tex/latex/l3backend/l3backend-pdfmode.def
-File: l3backend-pdfmode.def 2020-03-12 L3 backend support: PDF mode
-\l__kernel_color_stack_int=\count198
-\l__pdf_internal_box=\box59
-))
-Package: xparse 2020-03-06 L3 Experimental document command parser
-\l__xparse_current_arg_int=\count199
-\g__xparse_grabber_int=\count266
-\l__xparse_m_args_int=\count267
-\l__xparse_v_nesting_int=\count268
+\l_MT_shortvdotswithinadjustabove_dim=\dimen174
+\l_MT_shortvdotswithinadjustbelow_dim=\dimen175
+\l_MT_above_intertext_sep=\dimen176
+\l_MT_below_intertext_sep=\dimen177
+\l_MT_above_shortintertext_sep=\dimen178
+\l_MT_below_shortintertext_sep=\dimen179
+\xmathstrut@box=\box66
+\xmathstrut@dim=\dimen180
 ) (/usr/local/texlive/2020/texmf-dist/tex/latex/geometry/geometry.sty
 Package: geometry 2020/01/02 v5.9 Page Geometry
  (/usr/local/texlive/2020/texmf-dist/tex/generic/iftex/ifvtex.sty
@@ -255,55 +309,56 @@ Package: ifvtex 2019/10/25 v1.7 ifvtex legacy package. Use iftex instead.
  (/usr/local/texlive/2020/texmf-dist/tex/generic/iftex/iftex.sty
 Package: iftex 2020/03/06 v1.0d TeX engine tests
 ))
-\Gm@cnth=\count269
-\Gm@cntv=\count270
-\c@Gm@tempcnt=\count271
-\Gm@bindingoffset=\dimen168
-\Gm@wd@mp=\dimen169
-\Gm@odd@mp=\dimen170
-\Gm@even@mp=\dimen171
-\Gm@layoutwidth=\dimen172
-\Gm@layoutheight=\dimen173
-\Gm@layouthoffset=\dimen174
-\Gm@layoutvoffset=\dimen175
-\Gm@dimlist=\toks25
+\Gm@cnth=\count278
+\Gm@cntv=\count279
+\c@Gm@tempcnt=\count280
+\Gm@bindingoffset=\dimen181
+\Gm@wd@mp=\dimen182
+\Gm@odd@mp=\dimen183
+\Gm@even@mp=\dimen184
+\Gm@layoutwidth=\dimen185
+\Gm@layoutheight=\dimen186
+\Gm@layouthoffset=\dimen187
+\Gm@layoutvoffset=\dimen188
+\Gm@dimlist=\toks26
 ) (/Users/inescipullo/Documents2.0/Analisis de Lenguajes de Programacion/alp/informe/informe.aux)
 \openout1 = `informe.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 60.
-LaTeX Font Info:    ... okay on input line 60.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 60.
-LaTeX Font Info:    ... okay on input line 60.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 60.
-LaTeX Font Info:    ... okay on input line 60.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 60.
-LaTeX Font Info:    ... okay on input line 60.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 60.
-LaTeX Font Info:    ... okay on input line 60.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 60.
-LaTeX Font Info:    ... okay on input line 60.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 60.
-LaTeX Font Info:    ... okay on input line 60.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 88.
+LaTeX Font Info:    ... okay on input line 88.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 88.
+LaTeX Font Info:    ... okay on input line 88.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 88.
+LaTeX Font Info:    ... okay on input line 88.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 88.
+LaTeX Font Info:    ... okay on input line 88.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 88.
+LaTeX Font Info:    ... okay on input line 88.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 88.
+LaTeX Font Info:    ... okay on input line 88.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 88.
+LaTeX Font Info:    ... okay on input line 88.
  (/usr/local/texlive/2020/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count272
-\scratchdimen=\dimen176
-\scratchbox=\box60
-\nofMPsegments=\count273
-\nofMParguments=\count274
-\everyMPshowfont=\toks26
-\MPscratchCnt=\count275
-\MPscratchDim=\dimen177
-\MPnumerator=\count276
-\makeMPintoPDFobject=\count277
-\everyMPtoPDFconversion=\toks27
+\scratchcounter=\count281
+\scratchdimen=\dimen189
+\scratchbox=\box67
+\nofMPsegments=\count282
+\nofMParguments=\count283
+\everyMPshowfont=\toks27
+\MPscratchCnt=\count284
+\MPscratchDim=\dimen190
+\MPnumerator=\count285
+\makeMPintoPDFobject=\count286
+\everyMPtoPDFconversion=\toks28
 ) (/usr/local/texlive/2020/texmf-dist/tex/latex/epstopdf-pkg/epstopdf-base.sty
 Package: epstopdf-base 2020-01-24 v2.11 Base part for package epstopdf
 Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 485.
  (/usr/local/texlive/2020/texmf-dist/tex/latex/latexconfig/epstopdf-sys.cfg
 File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Live
 )) ABD: EverySelectfont initializing macros
-LaTeX Info: Redefining \selectfont on input line 60.
+LaTeX Info: Redefining \selectfont on input line 88.
+\c@lstlisting=\count287
 
 *geometry* driver: auto-detecting
 *geometry* detected driver: pdftex
@@ -342,24 +397,24 @@ LaTeX Info: Redefining \selectfont on input line 60.
 [1
 
 {/usr/local/texlive/2020/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
-LaTeX Font Info:    Trying to load font information for U+msa on input line 92.
+LaTeX Font Info:    Trying to load font information for U+msa on input line 120.
  (/usr/local/texlive/2020/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 92.
+LaTeX Font Info:    Trying to load font information for U+msb on input line 120.
  (/usr/local/texlive/2020/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
-LaTeX Font Info:    Trying to load font information for U+rsfs on input line 92.
+LaTeX Font Info:    Trying to load font information for U+rsfs on input line 120.
  (/usr/local/texlive/2020/texmf-dist/tex/latex/jknapltx/ursfs.fd
 File: ursfs.fd 1998/03/24 rsfs font definition file (jk)
 )
-LaTeX Font Info:    Trying to load font information for OMS+cmr on input line 149.
+LaTeX Font Info:    Trying to load font information for OMS+cmr on input line 177.
  (/usr/local/texlive/2020/texmf-dist/tex/latex/base/omscmr.fd
 File: omscmr.fd 2019/12/16 v2.5j Standard LaTeX font definitions
 )
 LaTeX Font Info:    Font shape `OMS/cmr/bx/n' in size <10.95> not available
-(Font)              Font shape `OMS/cmsy/b/n' tried instead on input line 149.
+(Font)              Font shape `OMS/cmsy/b/n' tried instead on input line 177.
 
 
 Package Fancyhdr Warning: \headheight is too small (12.0pt): 
@@ -368,41 +423,131 @@ We now make it that large for the rest of the document.
 This may cause the page layout to be inconsistent, however.
 
 [1] [2]
-Overfull \hbox (82.77428pt too wide) detected at line 177
+Overfull \hbox (82.77428pt too wide) detected at line 205
 []
  []
 
 
-Overfull \hbox (219.78738pt too wide) detected at line 199
+Overfull \hbox (219.78738pt too wide) detected at line 227
 []
  []
 
 
-Overfull \hbox (168.65967pt too wide) detected at line 228
+Overfull \hbox (168.65967pt too wide) detected at line 256
 []
  []
 
 [3
 
 ]
-Overfull \hbox (155.91005pt too wide) detected at line 266
+Overfull \hbox (155.91005pt too wide) detected at line 294
 []
  []
 
-[4] (/Users/inescipullo/Documents2.0/Analisis de Lenguajes de Programacion/alp/informe/informe.aux) ) 
+[4] (/usr/local/texlive/2020/texmf-dist/tex/latex/listings/lstlang1.sty
+File: lstlang1.sty 2020/03/24 1.8d listings language file
+) (/usr/local/texlive/2020/texmf-dist/tex/latex/listings/lstlang2.sty
+File: lstlang2.sty 2020/03/24 1.8d listings language file
+)
+LaTeX Font Info:    Trying to load font information for OML+cmr on input line 304.
+ (/usr/local/texlive/2020/texmf-dist/tex/latex/base/omlcmr.fd
+File: omlcmr.fd 2019/12/16 v2.5j Standard LaTeX font definitions
+)
+LaTeX Font Info:    Font shape `OML/cmr/m/n' in size <9> not available
+(Font)              Font shape `OML/cmm/m/it' tried instead on input line 304.
+ [5
+
+]
+/Users/inescipullo/Documents2.0/Analisis de Lenguajes de Programacion/alp/informe/informe.tex:485: Missing $ inserted.
+<inserted text> 
+                $
+l.485 ...tsquigarrow \langle c_0, \sigma' \rangle}
+                                                  
+I've inserted a begin-math/end-math symbol since I think
+you left one out. Proceed, with fingers crossed.
+
+/Users/inescipullo/Documents2.0/Analisis de Lenguajes de Programacion/alp/informe/informe.tex:485: Missing $ inserted.
+<inserted text> 
+                $
+l.485 ...tsquigarrow \langle c_0, \sigma' \rangle}
+                                                  
+I've inserted something that you may have forgotten.
+(See the <inserted text> above.)
+With luck, this will get me unwedged. But if you
+really didn't forget anything, try typing `2' now; then
+my insertion and my current dilemma will both disappear.
+
+/Users/inescipullo/Documents2.0/Analisis de Lenguajes de Programacion/alp/informe/informe.tex:490: Missing $ inserted.
+<inserted text> 
+                $
+l.490 ...tsquigarrow \langle c_1, \sigma' \rangle}
+                                                  
+I've inserted a begin-math/end-math symbol since I think
+you left one out. Proceed, with fingers crossed.
+
+/Users/inescipullo/Documents2.0/Analisis de Lenguajes de Programacion/alp/informe/informe.tex:490: Missing $ inserted.
+<inserted text> 
+                $
+l.490 ...tsquigarrow \langle c_1, \sigma' \rangle}
+                                                  
+I've inserted something that you may have forgotten.
+(See the <inserted text> above.)
+With luck, this will get me unwedged. But if you
+really didn't forget anything, try typing `2' now; then
+my insertion and my current dilemma will both disappear.
+
+/Users/inescipullo/Documents2.0/Analisis de Lenguajes de Programacion/alp/informe/informe.tex:496: Missing $ inserted.
+<inserted text> 
+                $
+l.496 ...\ b \ \textbf{until} \ c, \sigma \rangle}
+                                                  
+I've inserted a begin-math/end-math symbol since I think
+you left one out. Proceed, with fingers crossed.
+
+/Users/inescipullo/Documents2.0/Analisis de Lenguajes de Programacion/alp/informe/informe.tex:496: Missing $ inserted.
+<inserted text> 
+                $
+l.496 ...\ b \ \textbf{until} \ c, \sigma \rangle}
+                                                  
+I've inserted something that you may have forgotten.
+(See the <inserted text> above.)
+With luck, this will get me unwedged. But if you
+really didn't forget anything, try typing `2' now; then
+my insertion and my current dilemma will both disappear.
+
+/Users/inescipullo/Documents2.0/Analisis de Lenguajes de Programacion/alp/informe/informe.tex:501: Missing $ inserted.
+<inserted text> 
+                $
+l.501 ...l} \ b, \sigma \rangle \rightsquigarrow }
+                                                  
+I've inserted a begin-math/end-math symbol since I think
+you left one out. Proceed, with fingers crossed.
+
+/Users/inescipullo/Documents2.0/Analisis de Lenguajes de Programacion/alp/informe/informe.tex:501: Missing $ inserted.
+<inserted text> 
+                $
+l.501 ...l} \ b, \sigma \rangle \rightsquigarrow }
+                                                  
+I've inserted something that you may have forgotten.
+(See the <inserted text> above.)
+With luck, this will get me unwedged. But if you
+really didn't forget anything, try typing `2' now; then
+my insertion and my current dilemma will both disappear.
+
+[6] [7] (/Users/inescipullo/Documents2.0/Analisis de Lenguajes de Programacion/alp/informe/informe.aux) ) 
 Here is how much of TeX's memory you used:
- 5291 strings out of 480608
- 82577 string characters out of 5903630
- 344518 words of memory out of 5000000
- 21079 multiletter control sequences out of 15000+600000
- 542078 words of font info for 60 fonts, out of 8000000 for 9000
+ 8118 strings out of 480608
+ 120349 string characters out of 5903630
+ 647076 words of memory out of 5000000
+ 23867 multiletter control sequences out of 15000+600000
+ 545157 words of font info for 73 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 36i,19n,46p,374b,309s stack positions out of 5000i,500n,10000p,200000b,80000s
-</usr/local/texlive/2020/texmf-dist/fonts/type1/public/amsfonts/cm/cmbsy10.pfb></usr/local/texlive/2020/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/local/texlive/2020/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/local/texlive/2020/texmf-dist/fonts/type1/public/amsfonts/cm/cmbxti10.pfb></usr/local/texlive/2020/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/local/texlive/2020/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/local/texlive/2020/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/local/texlive/2020/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/local/texlive/2020/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/local/texlive/2020/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive/2020/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/local/texlive/2020/texmf-dist/fonts/type1/public/amsfonts/symbols/msam10.pfb>
-Output written on "/Users/inescipullo/Documents2.0/Analisis de Lenguajes de Programacion/alp/informe/informe.pdf" (5 pages, 131163 bytes).
+ 37i,19n,49p,374b,1846s stack positions out of 5000i,500n,10000p,200000b,80000s
+{/usr/local/texlive/2020/texmf-dist/fonts/enc/dvips/cm-super/cm-super-ts1.enc}</usr/local/texlive/2020/texmf-dist/fonts/type1/public/amsfonts/cm/cmbsy10.pfb></usr/local/texlive/2020/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/local/texlive/2020/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/local/texlive/2020/texmf-dist/fonts/type1/public/amsfonts/cm/cmbxti10.pfb></usr/local/texlive/2020/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/local/texlive/2020/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/local/texlive/2020/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi9.pfb></usr/local/texlive/2020/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/local/texlive/2020/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/local/texlive/2020/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb></usr/local/texlive/2020/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/local/texlive/2020/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb></usr/local/texlive/2020/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive/2020/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/local/texlive/2020/texmf-dist/fonts/type1/public/amsfonts/symbols/msam10.pfb></usr/local/texlive/2020/texmf-dist/fonts/type1/public/cm-super/sfrm0900.pfb>
+Output written on "/Users/inescipullo/Documents2.0/Analisis de Lenguajes de Programacion/alp/informe/informe.pdf" (8 pages, 175670 bytes).
 PDF statistics:
- 68 PDF objects out of 1000 (max. 8388607)
- 48 compressed objects within 1 object stream
+ 96 PDF objects out of 1000 (max. 8388607)
+ 69 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
  1 words of extra memory for PDF output out of 10000 (max. 10000000)
 

@@ -37,37 +37,33 @@ lis = makeTokenParser
                         , "=="
                         , "!="
                         , ";"
-                        , "," -- van aca agregados los corchetes para parsearlos?? NO
+                        , ","
                         ]
-    -- , identStart      = letter <|> char '_'
-    -- , identLetter     = alphaNum <|> char '_'
     }
   )
--- Hay que completar todas las definiciones que faltan dentro del lis?
--- Que es el opLetter y opStart?
 
 
 ----------------------------------
 --- Parser de expressiones enteras
 -----------------------------------
 intexp1 :: Parser (Exp Int)
-intexp1 = try chainl1 intexp (do{ reservedOp lis ","; return ESeq })
+intexp1 = try (chainl1 intexp (do{ reservedOp lis ","; return ESeq }))
           <|>
           try ( do y <- identifier lis
                    reservedOp lis "="
                    x <- intexp
                    return (EAssgn y x) ) -- entonces cada vez que uso el operador <|> de Parsec, el primer parser tiene que ir con un try???
           <|>
-          try chainl1 intexp ( do{ reservedOp lis "+"; return Plus} <|> do{ reservedOp lis "-"; return Minus} )
+          try (chainl1 intexp ( do{ reservedOp lis "+"; return Plus} <|> do{ reservedOp lis "-"; return Minus} ))
           <|>
-          try chainl1 intexp ( do{ reservedOp lis "*"; return Times} <|> do{ reservedOp lis "/"; return Div} )
+          try (chainl1 intexp ( do{ reservedOp lis "*"; return Times} <|> do{ reservedOp lis "/"; return Div} ))
           <|>
           do reservedOp lis "-"
              e <- intexp
              return (UMinus e)
           <|>
-          do y <- natural
-             return (Const y)
+          do y1 <- natural lis
+             return (Const y1)
           <|>
           do z <- identifier lis
              return (Var z)
@@ -80,27 +76,32 @@ intexp = parens lis intexp <|> intexp1
 ------------------------------------
 
 boolexp1 :: Parser (Exp Bool)
-boolexp1 = try chainl1 boolexp (do{ reservedOp lis "||"; return Or })
-           <|>
-           try chainl1 boolexp (do{ reservedOp lis "&&"; return And })
-           <|>
-           try ( do reservedOp lis "!"
-                    x <- boolexp
-                    return (Not x) )
-           <|>
-           chainl1 intexp ( try (do{ reservedOp lis "=="; return Eq })
-                             <|>
-                             try (do{ reservedOp lis "!="; return NEq })
-                             <|>
-                             try (do{ reservedOp lis "<"; return Lt })
-                             <|> 
-                             try (do{ reservedOp lis ">"; return Gt }) )
-           <|>
-           do reserved lis "true"
+boolexp1 = try (chainl1 boolexpand (do{ reservedOp lis "||"; return Or }))
+          --  <|>
+boolexpand = try (chainl1 atom (do{ reservedOp lis "&&"; return And }))
+
+          --  <|>
+          --  do x <- intexp 
+          --     ( try (do{ reservedOp lis "=="; return Eq })
+          --       <|>
+          --       try (do{ reservedOp lis "!="; return NEq })
+          --       <|>
+          --       try (do{ reservedOp lis "<"; return Lt })
+          --       <|> 
+          --       try (do{ reservedOp lis ">"; return Gt }) )
+          --     y <- intexp
+          --  <|>
+
+atom =     do reserved lis "true"
               return BTrue
            <|>
            do reserved lis "false"
               return BFalse
+           <|>
+           do reservedOp lis "!"
+              x <- boolexp
+              return (Not x)
+
 
 boolexp :: Parser (Exp Bool)
 boolexp = parens lis boolexp <|> boolexp1
@@ -110,7 +111,7 @@ boolexp = parens lis boolexp <|> boolexp1
 -----------------------------------
 
 comm :: Parser Comm
-comm = try chainl1 comm (do{ reservedOp lis ";"; return Seq })
+comm = try (chainl1 comm (do{ reservedOp lis ";"; return Seq }))
        <|>
        try ( do reserved lis "repeat"
                 x <- comm
@@ -122,11 +123,11 @@ comm = try chainl1 comm (do{ reservedOp lis ";"; return Seq })
        try ( do reserved lis "if"
                 b2 <- boolexp
                 y <- braces lis comm
-                (try (do reseved lis "else"
+                (try (do reserved lis "else"
                          y2 <- braces lis comm
-                         return IfThenElse b2 y y2)
+                         return (IfThenElse b2 y y2))
                  <|>
-                 return IfThen b2 y) ) -- pattern me define un sinonimo de tipo o que es?
+                 return (IfThen b2 y)) )
        <|> 
        try ( do v <- identifier lis
                 reservedOp lis "="
