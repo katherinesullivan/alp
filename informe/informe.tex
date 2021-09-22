@@ -162,166 +162,27 @@ Estan mal algunos simbolos
     boolexp\ ::=\ & \textbf{`true'}\ |\ \textbf{`false'} \\
              |\ \ & intexp\ \textbf{`=='}\ intexp \\
              |\ \ & intexp\ \textbf{`!='}\ intexp \\
-             |\ \ & intexp\ \textbf{`<'}\ intexp \\
-             |\ \ & intexp\ \textbf{`>'}\ intexp \\
+             |\ \ & intexp\ \textbf{`\textless'}\ intexp \\
+             |\ \ & intexp\ \textbf{`\textgreater'}\ intexp \\
              |\ \ & boolexp\ \textbf{`\&\&'}\ boolexp \\
-             |\ \ & boolexp\ \textbf{`||'}\ boolexp \\
+             |\ \ & boolexp\ \textbf{`$||$'}\ boolexp \\
              |\ \ & \textbf{`!'}\ boolexp \\
              |\ \ & \textbf{`('}\ boolexp\ \textbf{`)'} \\
     comm\ :=\ & \textbf{\emph{skip}} \\
           |\ \ & var\ \textbf{`='}\ intexp \\
           |\ \ & comm\ \textbf{`;'}\ comm \\
           |\ \ & \textbf{`if'}\ boolexp\ \textbf{`\{'}\ comm\ \textbf{`\}'} \\
-          |\ \ & \textbf{`if'}\ boolexp\ \textbf{`\{'}\ comm\ \textbf{`\}' `else' `\{'}\ comm \\
-          |\ \ & \textbf{`repeat'}\ comm\ \textbf{`until'}\ boolexp\ \textbf{`end'}
+          |\ \ & \textbf{`if'}\ boolexp\ \textbf{`\{'}\ comm\ \textbf{`\}' `else' `\{'}\ comm \ \textbf{`\}'} \\
+          |\ \ & \textbf{`repeat'}\ \textbf{`\{'} \ comm\ \textbf{`\}'} \ \textbf{`until'}\ boolexp\
 \end{align*}
-
-
-\section*{Ejercicio 6}
-
-Habria que enunciar las nuevas reglas (ejercicio 4) y cambiar el nombre aca, y enunciar las reglas de la clausura transitiva.
-
-\begin{landscape}
-
-
-\textbf{A:}
-
-\begin{displaymath}
-    \prftree[r]{$\mathrm{T_1}$}{
-        \prftree[r]{$\mathrm{SEQ_1}$}
-        {\langle \textbf{skip}; \textbf{repeat}\ x=x-y\ \textbf{until}\ x==0,\ [[\sigma|x:1]|y:1] \rangle \curly \langle \textbf{repeat}\ x=x-y\ \textbf{until}\ x==0,\ [[\sigma|x:1]|y:1] \rangle}
-    }
-    {\langle \textbf{skip}; \textbf{repeat}\ x=x-y\ \textbf{until}\ x==0,\ [[\sigma|x:1]|y:1] \rangle \curly^* \langle \textbf{repeat}\ x=x-y\ \textbf{until}\ x==0,\ [[\sigma|x:1]|y:1] \rangle}
-\end{displaymath}
-
-\textbf{B:}
-
-\begin{displaymath}
-    \prftree[r]{$\mathrm{T_1}$}{
-        \prftree[r]{$\mathrm{REPEAT}$}
-        {\langle \textbf{repeat}\ x=x-y\ \textbf{until}\ x==0,\ [[\sigma|x:1]|y:1] \rangle \curly \langle x=x-y; \textbf{if}\ x==0\ \textbf{then\ skip\ else\ repeat}\ x=x-y\ \textbf{until}\ x==0,\ [[\sigma|x:1]|y:1] \rangle}
-    }
-    {\langle \textbf{repeat}\ x=x-y\ \textbf{until}\ x==0,\ [[\sigma|x:1]|y:1] \rangle \curly^* \langle x=x-y; \textbf{if}\ x==0\ \textbf{then\ skip\ else\ repeat}\ x=x-y\ \textbf{until}\ x==0,\ [[\sigma|x:1]|y:1] \rangle}
-\end{displaymath}
-
-\textbf{C:}
-
-\begin{displaymath}
-    \prftree[r]{$\mathrm{T_1}$}{
-        \prftree[r]{$\mathrm{SEQ_2}$}{
-            \prftree[r]{$\mathrm{ASS}$}{
-                \prftree[r]{$\mathrm{MINUS}$}{
-                    \prftree[r]{$\mathrm{VAR}$}
-                    {\langle x,\ [[\sigma|x:1]|y:1] \rangle \Downarrow_{exp} \langle \textbf{1},\ [[\sigma|x:1]|y:1] \rangle}
-                }{
-                    \prftree[r]{$\mathrm{VAR}$}
-                    {\langle y,\ [[\sigma|x:1]|y:1] \rangle \Downarrow_{exp} \langle \textbf{1},\ [[\sigma|x:1]|y:1] \rangle}  
-                }
-                {\langle x-y,\ [[\sigma|x:1]|y:1] \rangle \Downarrow_{exp} \langle \textbf{0},\ [[\sigma|x:1]|y:1] \rangle}
-            }
-            {\langle x=x-y,\ [[\sigma|x:1]|y:1] \rangle \curly \langle \textbf{skip},\ [[\sigma|x:0]|y:1] \rangle}
-        }
-        {\langle x=x-y; \textbf{if}\ x==0\ \textbf{then\ skip\ else\ repeat}\ x=x-y\ \textbf{until}\ x==0,\ [[\sigma|x:1]|y:1] \rangle \curly \langle \textbf{skip}; \textbf{if}\ x==0\ \textbf{then\ skip\ else\ repeat}\ x=x-y\ \textbf{until}\ x==0,\ [[\sigma|x:0]|y:1] \rangle}
-    }
-    {\langle x=x-y; \textbf{if}\ x==0\ \textbf{then\ skip\ else\ repeat}\ x=x-y\ \textbf{until}\ x==0,\ [[\sigma|x:1]|y:1] \rangle \curly^* \langle \textbf{skip}; \textbf{if}\ x==0\ \textbf{then\ skip\ else\ repeat}\ x=x-y\ \textbf{until}\ x==0,\ [[\sigma|x:0]|y:1] \rangle}
-\end{displaymath}
-
-\textbf{D:}
-
-\begin{displaymath}
-    \prftree[r]{$\mathrm{T_1}$}{
-        \prftree[r]{$\mathrm{SEQ_2}$}{
-            \prftree[r]{$\mathrm{ASS}$}{
-                \prftree[r]{$\mathrm{NASS}$}{
-                    \prftree[r]{$\mathrm{NVAL}$}
-                    {\langle 1,\ [[\sigma|x:2]|y:2] \rangle \Downarrow_{exp} \langle \textbf{1} ,\ [[\sigma|x:2]|y:2] \rangle}
-                }
-                {\langle y=1,\ [[\sigma|x:2]|y:2] \rangle \Downarrow_{exp} \langle \textbf{1} ,\ [[\sigma|x:2]|y:1] \rangle}
-            }
-            {\langle x=y=1,\ [[\sigma|x:2]|y:2] \rangle \curly \langle \textbf{skip} ,\ [[\sigma|x:1]|y:1] \rangle}
-        }
-        {\langle x=y=1; \textbf{repeat}\ x=x-y\ \textbf{until}\ x==0,\ [[\sigma|x:2]|y:2] \rangle \curly \langle \textbf{skip}; \textbf{repeat}\ x=x-y\ \textbf{until}\ x==0,\ [[\sigma|x:1]|y:1] \rangle}
-    }
-    {\langle x=y=1; \textbf{repeat}\ x=x-y\ \textbf{until}\ x==0,\ [[\sigma|x:2]|y:2] \rangle \curly^* \langle \textbf{skip}; \textbf{repeat}\ x=x-y\ \textbf{until}\ x==0,\ [[\sigma|x:1]|y:1] \rangle}
-\end{displaymath}
-
-\textbf{E:}
-
-\begin{displaymath}
-    \prftree[r]{$\mathrm{T_1}$}{
-        \prftree[r]{$\mathrm{SEQ_1}$}
-        {\langle \textbf{skip}; \textbf{if}\ x==0\ \textbf{then\ skip\ else\ repeat}\ x=x-y\ \textbf{until}\ x==0,\ [[\sigma|x:0]|y:1] \rangle \curly \langle \textbf{if}\ x==0\ \textbf{then\ skip\ else\ repeat}\ x=x-y\ \textbf{until}\ x==0,\ [[\sigma|x:0]|y:1] \rangle}
-    }
-    {\langle \textbf{skip}; \textbf{if}\ x==0\ \textbf{then\ skip\ else\ repeat}\ x=x-y\ \textbf{until}\ x==0,\ [[\sigma|x:0]|y:1] \rangle \curly^* \langle \textbf{if}\ x==0\ \textbf{then\ skip\ else\ repeat}\ x=x-y\ \textbf{until}\ x==0,\ [[\sigma|x:0]|y:1] \rangle}
-\end{displaymath}
-
-\textbf{F:}
-
-\begin{displaymath}
-    \prftree[r]{$\mathrm{T_1}$}{
-        \prftree[r]{$\mathrm{IF_1}$}{
-            \prftree[r]{$\mathrm{EQ}$}{
-                \prftree[r]{$\mathrm{VAR}$}
-                {\langle x,\ [[\sigma|x:0]|y:1] \rangle \Downarrow_{exp} \langle \textbf{0},\ [[\sigma|x:0]|y:1] \rangle}
-            }{
-                \prftree[r]{$\mathrm{NVAL}$}
-                {\langle 0,\ [[\sigma|x:0]|y:1] \rangle \Downarrow_{exp} \langle \textbf{0},\ [[\sigma|x:0]|y:1] \rangle}
-            }
-            {\langle x==0,\ [[\sigma|x:0]|y:1] \rangle \Downarrow_{exp} \langle \textbf{true},\ [[\sigma|x:0]|y:1] \rangle}
-        }
-        {\langle \textbf{if}\ x==0\ \textbf{then\ skip\ else\ repeat}\ x=x-y\ \textbf{until}\ x==0,\ [[\sigma|x:0]|y:1] \rangle \curly \langle \textbf{skip},\ [[\sigma|x:0]|y:1] \rangle}
-    }
-    {\langle \textbf{if}\ x==0\ \textbf{then\ skip\ else\ repeat}\ x=x-y\ \textbf{until}\ x==0,\ [[\sigma|x:0]|y:1] \rangle \curly^* \langle \textbf{skip},\ [[\sigma|x:0]|y:1] \rangle}
-\end{displaymath}
-
-\textbf{DEM:}
-
-\begin{displaymath}
-    \prftree[r]{$\mathrm{T_2}$}{
-        \prftree[r]{$\mathrm{T_2}$}{
-            \prftree[r]{$\mathrm{T_2}$}{
-                \prftree[r]{$\mathrm{T_2}$}{
-                    \prftree[r]{$\mathrm{T_2}$}{D}{A}
-                    {\langle x=y=1; \textbf{repeat}\ x=x-y\ \textbf{until}\ x==0,\ [[\sigma|x:2]|y:2] \rangle \curly^* \langle \textbf{repeat}\ x=x-y\ \textbf{until}\ x==0,\ [[\sigma|x:1]|y:1] \rangle}
-                }{B}
-                {\langle x=y=1; \textbf{repeat}\ x=x-y\ \textbf{until}\ x==0,\ [[\sigma|x:2]|y:2] \rangle \curly^* \langle x=x-y; \textbf{if}\ x==0\ \textbf{then\ skip\ else\ repeat}\ x=x-y\ \textbf{until}\ x==0,\ [[\sigma|x:1]|y:1] \rangle}
-            }{C}
-            {\langle x=y=1; \textbf{repeat}\ x=x-y\ \textbf{until}\ x==0,\ [[\sigma|x:2]|y:2] \rangle \curly^* \langle \textbf{skip}; \textbf{if}\ x==0\ \textbf{then\ skip\ else\ repeat}\ x=x-y\ \textbf{until}\ x==0,\ [[\sigma|x:0]|y:1] \rangle}
-        }{E}
-        {\langle x=y=1; \textbf{repeat}\ x=x-y\ \textbf{until}\ x==0,\ [[\sigma|x:2]|y:2] \rangle \curly^* \langle \textbf{if}\ x==0\ \textbf{then\ skip\ else\ repeat}\ x=x-y\ \textbf{until}\ x==0,\ [[\sigma|x:0]|y:1] \rangle}
-    }{F}
-    {\langle x=y=1; \textbf{repeat}\ x=x-y\ \textbf{until}\ x==0,\ [[\sigma|x:2]|y:2] \rangle \curly^* \langle \textbf{skip},\ [[\sigma|x:0]|y:1] \rangle}
-\end{displaymath}
-\end{landscape}
-
 
 \section*{Ejercicio 2}
 
-\begin{lstlisting}[style = HaskellStyle]
-    -- Expresiones, aritmeticas y booleanas
-data Exp a where
-  -- Expresiones enteras
-  Const ::Int -> Exp Int
-  Var ::Variable -> Exp Int
-  UMinus ::Exp Int -> Exp Int
-  Plus ::Exp Int -> Exp Int -> Exp Int
-  Minus ::Exp Int -> Exp Int -> Exp Int
-  Times ::Exp Int -> Exp Int -> Exp Int
-  Div ::Exp Int -> Exp Int -> Exp Int
-  EAssgn ::Variable -> Exp Int -> Exp Int
-  ESeq ::Exp Int -> Exp Int -> Exp Int
+Realizado en archivo \verb|src/AST.hs|.
 
-  -- Expreseiones booleanas
-  BTrue ::Exp Bool
-  BFalse ::Exp Bool
-  Lt ::Exp Int -> Exp Int -> Exp Bool
-  Gt ::Exp Int -> Exp Int -> Exp Bool
-  And ::Exp Bool -> Exp Bool -> Exp Bool
-  Or ::Exp Bool -> Exp Bool -> Exp Bool
-  Not ::Exp Bool -> Exp Bool
-  Eq ::Exp Int -> Exp Int -> Exp Bool
-  NEq ::Exp Int -> Exp Int -> Exp Bool
-\end{lstlisting}
+\section*{Ejercicio 3}
+
+Realizado en archivo \verb|src/Parser.hs|.
 
 \section*{Ejercicio 4}
 
@@ -453,14 +314,381 @@ Llamamos IASS a la asignaci\'on como expresi\'on y ISEQ a la secuencializaci\'on
 \end{prooftree}
 \end{center}
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 \section*{Ejercicio 5}
 
 \subsection*{Determinismo de la relaci\'on de evaluaci\'on en un paso $\rightsquigarrow$}
 
+Queremos probar que dado un comando $c$ y un estado $\sigma$
+
+\begin{equation}
+\langle c, \sigma \rangle \rightsquigarrow \langle c', \sigma' \rangle \ \wedge \ \langle c, \sigma \rangle \rightsquigarrow \langle c'', \sigma'' \rangle \implies c' = c'' \wedge \sigma' = \sigma''
+\end{equation}
+
+Para probarlo haremos inducci\'on estructural sobre c
+\vspace{3mm}
+
+\underline{\textbf{Caso 1}}:
+
+Supongamos
+
+\[c := \textbf{skip}\]
+
+Como un comando de la forma \textbf{skip} termina la ejecuci\'on, este no deriva en un paso a ning\'un otro comando, por lo tanto, por premisas falsas en una implicancia resulta verdadero $(1)$.
+\vspace{3mm}
+
+\underline{\textbf{Caso 2}}:
+
+Supongamos
+
+\[c := v = e\]
+
+Por la forma de $c$ la \'unica regla de sem\'antica operacional que se le puede aplicar resulta 
+
+\begin{center}
+\begin{prooftree}
+    \hypo{\langle e,\sigma \rangle \Downarrow_{exp} \langle n,\sigma_1 \rangle}
+    \infer1[ASS]{\langle c, \sigma \rangle \rightsquigarrow \langle \textbf{skip}, [\sigma_1 | v: n] \rangle}
+\end{prooftree}
+\end{center}
+
+De lo que entonces concluimos que necesariamente
+
+$ c' = c'' = \textbf{skip}$
+
+$\sigma' = \sigma'' = \sigma_1$ 
+
+por lo que vale $(1)$.
+\vspace{3mm}
+
+\underline{\textbf{Caso 3}}:
+
+Supongamos 
+
+\[c := c_1;c_2 \]
+
+donde $c_1$ y $c_2$ son comandos.
+
+De aqu\'i tenemos dos opciones: que $c_1$ sea el comando \textbf{skip} o no.
+
+Si $c_1$ es \textbf{skip}, luego, como \textbf{skip} no deriva en un paso a ning\'un otro comando, la \'unica regla que podemos usar dada la estructura de $c$ es
+
+\begin{center}
+\begin{prooftree}
+    \hypo{}
+    \infer1[SEQ_1]{\langle \textbf{skip}; c_2, \sigma \rangle \rightsquigarrow \langle c_2, \sigma \rangle}
+\end{prooftree}
+\end{center}
+
+De lo que entonces concluimos que necesariamente
+
+$ c' = c'' = c_2$
+
+$\sigma' = \sigma'' = \sigma$ 
+
+por lo que vale $(1)$.
+
+Ahora bien, si $c_1$ no es \textbf{skip} resulta que la \'unica regla que podemos usar es 
+
+\begin{center}
+\begin{prooftree}
+    \hypo{\langle c_1, \sigma \rangle \rightsquigarrow \langle c'_1, \sigma_1 \rangle}
+    \infer1[SEQ_2]{\langle c_1; c_2, \sigma \rangle \rightsquigarrow \langle c'_1; c_2, \sigma_1 \rangle}
+\end{prooftree}
+\end{center}
+
+Por HI, sabemos que $c_1'$ es al \'unico comando que puede derivar en un paso $c_1$. Por lo tanto, sabemos que necesariamente
+
+$ c' = c'' = c_1' ; c_2$
+
+$\sigma' = \sigma'' = \sigma$ 
+
+por lo que vale $(1)$.
+\vspace{3mm}
+
+\underline{\textbf{Caso 4}}:
+
+Supongamos
+
+\[c:= \textbf{if} \ b\ \textbf{then}\ c_1\ \textbf{else} c_2\]
+
+Tenemos dos opciones: 
+
+\begin{equation}
+    \langle b, \sigma \rangle \Downarrow_{exp} \langle \textbf{`true'}, \sigma_1 \rangle
+\end{equation}
+
+\begin{equation}
+    \langle b, \sigma \rangle \Downarrow_{exp} \langle \textbf{`false'}, \sigma_1 \rangle
+\end{equation}
+
+Como la relaci\'on $\Downarrow_{exp}$ es determinista si vale $(2)$ no vale $(3)$ y viceversa.
+
+Supongamos primero que vale $(2)$. Luego por esto y por la forma de $c$ la \'unica regla de evaluaci\'on que se puede aplicar es 
+
+\begin{center}
+\begin{prooftree}
+    \hypo{\langle b, \sigma \rangle \Downarrow_{exp} \langle \textbf{true}, \sigma_1 \rangle}
+    \infer1[IF_1]{\langle \textbf{if}\ b \ \textbf{then} \ c_1 \ \textbf{else} \ c_2, \sigma \rangle \rightsquigarrow \langle c_1, \sigma_1 \rangle}
+\end{prooftree}
+\end{center}
+
+De lo que resulta que necesariamente
+
+$c' = c'' = c_1$
+
+$\sigma' = \sigma'' = \sigma_1$
+
+por lo que vale $(1)$.
+
+Ahora, supongamos que en cambio vale $(3)$, luego la \'unica regla de la que podemos hacer uso es
+
+\begin{center}
+\begin{prooftree}
+    \hypo{\langle b, \sigma \rangle \Downarrow_{exp} \langle \textbf{false}, \sigma_1 \rangle}
+    \infer1[IF_2]{\langle \textbf{if}\ b \ \textbf{then} \ c_1 \ \textbf{else} \ c_2, \sigma \rangle \rightsquigarrow \langle c_2, \sigma'_1 \rangle}
+\end{prooftree}
+\end{center}
+
+De lo que resulta que necesariamente
+
+$c' = c'' = c_2$
+
+$\sigma' = \sigma'' = \sigma_1$
+
+por lo que vale $(1)$.
+\vspace{3mm}
+
+\underline{\textbf{Caso 5}}:
+
+Supongamos
+
+\[c:= \textbf{repeat} \ c_1 \ \textbf{until}\ b\]
+
+Por la forma de $c$ la \'unica regla que puede ser utilizada es
+
+\begin{center}
+\begin{prooftree}
+    \hypo{}
+    \infer1[REPEAT]{\langle \textbf{repeat} \ c_1 \ \textbf{until} \ b, \sigma \rangle \rightsquigarrow \langle c_1; \textbf{if} \ b \ \textbf{then skip else repeat} \ b \ \textbf{until} \ c_1, \sigma \rangle}
+\end{prooftree}
+\end{center}
+
+De donde resulta necesariamente
+
+$c' = c'' = c_1; \textbf{if} \ b \ \textbf{then skip else repeat} \ b \ \textbf{until} \ c_1$
+
+$\sigma' = \sigma'' = \sigma$
+
+por lo que vale $(1)$.
+\vspace{3mm}
+
+Queda as\'i demostrado el determinismo de la relaci\'on de evaluci\'on en un paso $\rightsquigarrow$.
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section*{Ejercicio 6}
+
+Al hablar de la clausura transitiva de $\rightsquigarrow$ tenemos las siguientes reglas
+
+\begin{center}
+\begin{prooftree}
+    \hypo{\langle c, \sigma \rangle \rightsquigarrow \langle c', \sigma' \rangle}
+    \infer1[T_1]{\langle c, \sigma \rangle \rightsquigarrow^* \langle c', \sigma' \rangle}
+\end{prooftree}
+\hspace{1cm}
+\begin{prooftree}
+    \hypo{\langle c, \sigma \rangle \rightsquigarrow^* \langle c', \sigma' \rangle }
+    \hypo{\langle c', \sigma' \rangle \rightsquigarrow^* \langle c'', \sigma'' \rangle}
+    \infer2[T_2]{\langle c, \sigma \rangle \rightsquigarrow^* \langle c'', \sigma'' \rangle}
+\end{prooftree}
+\end{center}
+
+
+\textbf{A:}
+
+$a := \textbf{repeat}\ x=x-y\ \textbf{until}\ x==0$
+
+\begin{displaymath}
+    \prftree[r]{$\mathrm{T_1}$}{
+        \prftree[r]{$\mathrm{SEQ_1}$}
+        {\langle \textbf{skip; a},\ [[\sigma|x:1]|y:1] \rangle \curly \langle \textbf{a},\ [[\sigma|x:1]|y:1] \rangle}
+    }
+    {\langle \textbf{skip; a},\ [[\sigma|x:1]|y:1] \rangle \curly^* \langle \textbf{a},\ [[\sigma|x:1]|y:1] \rangle}
+\end{displaymath}
+
+\textbf{B:}
+
+$a:= \textbf{repeat}\ x=x-y\ \textbf{until}\ x==0$
+
+\begin{displaymath}
+    \prftree[r]{$\mathrm{T_1}$}{
+        \prftree[r]{$\mathrm{REPEAT}$}
+        {\langle \textbf{a},\ [[\sigma|x:1]|y:1] \rangle \curly \langle x=x-y; \textbf{if}\ x==0\ \textbf{then\ skip\ else\ a},\ [[\sigma|x:1]|y:1] \rangle}
+    }
+    {\langle \textbf{a},\ [[\sigma|x:1]|y:1] \rangle \curly^* \langle x=x-y; \textbf{if}\ x==0\ \textbf{then\ skip\ else\ a},\ [[\sigma|x:1]|y:1] \rangle}
+\end{displaymath}
+
+\textbf{C:}
+
+$c:= \textbf{if}\ x==0\ \textbf{then\ skip\ else\ repeat}\ x=x-y\ \textbf{until}\ x==0$
+
+\begin{displaymath}
+    \prftree[r]{$\mathrm{T_1}$}{
+        \prftree[r]{$\mathrm{SEQ_2}$}{
+            \prftree[r]{$\mathrm{ASS}$}{
+                \prftree[r]{$\mathrm{MINUS}$}{
+                    \prftree[r]{$\mathrm{VAR}$}
+                    {\langle x,\ [[\sigma|x:1]|y:1] \rangle \Downarrow_{exp} \langle \textbf{1},\ [[\sigma|x:1]|y:1] \rangle}
+                }{
+                    \prftree[r]{$\mathrm{VAR}$}
+                    {\langle y,\ [[\sigma|x:1]|y:1] \rangle \Downarrow_{exp} \langle \textbf{1},\ [[\sigma|x:1]|y:1] \rangle}  
+                }
+                {\langle x-y,\ [[\sigma|x:1]|y:1] \rangle \Downarrow_{exp} \langle \textbf{0},\ [[\sigma|x:1]|y:1] \rangle}
+            }
+            {\langle x=x-y,\ [[\sigma|x:1]|y:1] \rangle \curly \langle \textbf{skip},\ [[\sigma|x:0]|y:1] \rangle}
+        }
+        {\langle x=x-y; \ \textbf{c},\ [[\sigma|x:1]|y:1] \rangle \curly \langle \textbf{skip};\ \textbf{c},\ [[\sigma|x:0]|y:1] \rangle}
+    }
+    {\langle x=x-y;\ \textbf{c},\ [[\sigma|x:1]|y:1] \rangle \curly^* \langle \textbf{skip};\ \textbf{c},\ [[\sigma|x:0]|y:1] \rangle}
+\end{displaymath}
+
+\textbf{D:}
+
+$a:= \textbf{repeat}\ x=x-y\ \textbf{until}\ x==0$
+
+\begin{displaymath}
+    \prftree[r]{$\mathrm{T_1}$}{
+        \prftree[r]{$\mathrm{SEQ_2}$}{
+            \prftree[r]{$\mathrm{ASS}$}{
+                \prftree[r]{$\mathrm{IASS}$}{
+                    \prftree[r]{$\mathrm{NVAL}$}
+                    {\langle 1,\ [[\sigma|x:2]|y:2] \rangle \Downarrow_{exp} \langle \textbf{1} ,\ [[\sigma|x:2]|y:2] \rangle}
+                }
+                {\langle y=1,\ [[\sigma|x:2]|y:2] \rangle \Downarrow_{exp} \langle \textbf{1} ,\ [[\sigma|x:2]|y:1] \rangle}
+            }
+            {\langle x=y=1,\ [[\sigma|x:2]|y:2] \rangle \curly \langle \textbf{skip} ,\ [[\sigma|x:1]|y:1] \rangle}
+        }
+        {\langle x=y=1;\ \textbf{a},\ [[\sigma|x:2]|y:2] \rangle \curly \langle \textbf{skip};\ \textbf{a},\ [[\sigma|x:1]|y:1] \rangle}
+    }
+    {\langle x=y=1;\ \textbf{a},\ [[\sigma|x:2]|y:2] \rangle \curly^* \langle \textbf{skip};\ \textbf{a},\ [[\sigma|x:1]|y:1] \rangle}
+\end{displaymath}
+
+\textbf{E:}
+
+$c:= \textbf{if}\ x==0\ \textbf{then\ skip\ else\ repeat}\ x=x-y\ \textbf{until}\ x==0$
+
+\begin{displaymath}
+    \prftree[r]{$\mathrm{T_1}$}{
+        \prftree[r]{$\mathrm{SEQ_1}$}
+        {\langle \textbf{skip}; \ \textbf{c},\ [[\sigma|x:0]|y:1] \rangle \curly \langle \textbf{c},\ [[\sigma|x:0]|y:1] \rangle}
+    }
+    {\langle \textbf{skip}; \ \textbf{c},\ [[\sigma|x:0]|y:1] \rangle \curly^* \langle \textbf{c},\ [[\sigma|x:0]|y:1] \rangle}
+\end{displaymath}
+
+\textbf{F:}
+
+$c:= \textbf{if}\ x==0\ \textbf{then\ skip\ else\ repeat}\ x=x-y\ \textbf{until}\ x==0$
+
+\begin{displaymath}
+    \prftree[r]{$\mathrm{T_1}$}{
+        \prftree[r]{$\mathrm{IF_1}$}{
+            \prftree[r]{$\mathrm{EQ}$}{
+                \prftree[r]{$\mathrm{VAR}$}
+                {\langle x,\ [[\sigma|x:0]|y:1] \rangle \Downarrow_{exp} \langle \textbf{0},\ [[\sigma|x:0]|y:1] \rangle}
+            }{
+                \prftree[r]{$\mathrm{NVAL}$}
+                {\langle 0,\ [[\sigma|x:0]|y:1] \rangle \Downarrow_{exp} \langle \textbf{0},\ [[\sigma|x:0]|y:1] \rangle}
+            }
+            {\langle x==0,\ [[\sigma|x:0]|y:1] \rangle \Downarrow_{exp} \langle \textbf{true},\ [[\sigma|x:0]|y:1] \rangle}
+        }
+        {\langle \textbf{c},\ [[\sigma|x:0]|y:1] \rangle \curly \langle \textbf{skip},\ [[\sigma|x:0]|y:1] \rangle}
+    }
+    {\langle \textbf{c},\ [[\sigma|x:0]|y:1] \rangle \curly^* \langle \textbf{skip},\ [[\sigma|x:0]|y:1] \rangle}
+\end{displaymath}
+
+\textbf{DEM:}
+
+$a:= \textbf{repeat}\ x=x-y\ \textbf{until}\ x==0$
+
+$c:= \textbf{if}\ x==0\ \textbf{then\ skip\ else\ repeat}\ x=x-y\ \textbf{until}\ x==0$
+
+\iffalse
+\begin{displaymath}
+    \prftree[r]{$\mathrm{T_2}$}{
+        \prftree[r]{$\mathrm{T_2}$}{
+            \prftree[r]{$\mathrm{T_2}$}{
+                \prftree[r]{$\mathrm{T_2}$}{
+                    \prftree[r]{$\mathrm{T_2}$}{D}{A}
+                    {\langle x=y=1; \ \textbf{a},\ [[\sigma|x:2]|y:2] \rangle \curly^* \langle \textbf{a},\ [[\sigma|x:1]|y:1] \rangle}
+                }{B}
+                {\langle x=y=1;\ \textbf{a},\ [[\sigma|x:2]|y:2] \rangle \curly^* \langle x=x-y; \ \textbf{c}\ [[\sigma|x:1]|y:1] \rangle}
+            }{C}
+            {\langle x=y=1; \ \textbf{a},\ [[\sigma|x:2]|y:2] \rangle \curly^* \langle \textbf{skip}; \ \textbf{c},\ [[\sigma|x:0]|y:1] \rangle}
+        }{E}
+        {\langle x=y=1; \ \textbf{a},\ [[\sigma|x:2]|y:2] \rangle \curly^* \langle \textbf{c}\ [[\sigma|x:0]|y:1] \rangle}
+    }{F}
+    {\langle x=y=1; \textbf{a},\ [[\sigma|x:2]|y:2] \rangle \curly^* \langle \textbf{skip},\ [[\sigma|x:0]|y:1] \rangle}
+\end{displaymath}
+\fi
+
+\begin{prooftree}[separation=0.5em]
+    \hypo{D}
+    \hypo{A}
+    \infer2[T_2]{\langle x=y=1; \ \textbf{a},\ [[\sigma|x:2]|y:2] \rangle \curly^* \langle \textbf{a},\ [[\sigma|x:1]|y:1] \rangle}
+    \hypo{B}
+    \infer2[T_2]{\langle x=y=1;\ \textbf{a},\ [[\sigma|x:2]|y:2] \rangle \curly^* \langle x=x-y; \ \textbf{c}\ [[\sigma|x:1]|y:1] \rangle}
+    \hypo{C}
+    \infer2[T_2]{\langle x=y=1; \ \textbf{a},\ [[\sigma|x:2]|y:2] \rangle \curly^* \langle \textbf{skip}; \ \textbf{c},\ [[\sigma|x:0]|y:1] \rangle}
+    \hypo{E}
+    \infer2[T_2]{\langle x=y=1; \ \textbf{a},\ [[\sigma|x:2]|y:2] \rangle \curly^* \langle \textbf{c}\ [[\sigma|x:0]|y:1] \rangle}
+    \hypo{F}
+    \infer2[T_2]{\langle x=y=1; \textbf{a},\ [[\sigma|x:2]|y:2] \rangle \curly^* \langle \textbf{skip},\ [[\sigma|x:0]|y:1] \rangle}
+\end{prooftree}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section*{Ejercicio 7}
+
+Realizado en el archivo \verb|src/Eval1.hs|.
+
+\section*{Ejercicio 8}
+
+Realizado en el archivo \verb|src/Eval2.hs|.
+
+\section*{Ejercicio 9}
+
+Realizado en el archivo \verb|src/Eval3.hs|.
+
 \section*{Ejercicio 10}
 
 \subsection*{Nueva gram\'atica abstracta}
-for (intexp;boolexp;intexp) comm
+\begin{align*}
+    intexp\ ::=\ & nat\ |\ var\ |\ -_u\ intexp \\
+            |\ \ & intexp\ +\ intexp \\ 
+            |\ \ & intexp\ -_b\ intexp \\ 
+            |\ \ & intexp\ \times\ intexp \\ 
+            |\ \ & intexp\ \div\ intexp \\ 
+            |\ \ & var\ =\ intexp \\
+            |\ \ & intexp\ ,\ intexp \\
+    boolexp\ ::=\ & \textbf{true}\ |\ \textbf{false} \\
+             |\ \ & intexp\ ==\ intexp \\
+             |\ \ & intexp\ \ne\ intexp \\
+             |\ \ & intexp\ <\ intexp \\
+             |\ \ & intexp\ >\ intexp \\
+             |\ \ & boolexp\ \wedge\ boolexp \\
+             |\ \ & boolexp\ \vee\ boolexp \\
+             |\ \ & \neg\ boolexp \\
+    comm\ :=\ & \textbf{skip} \\
+          |\ \ & var = intexp \\
+          |\ \ & comm;\ comm \\
+          |\ \ & \textbf{if}\ boolexp\ \textbf{then}\ comm\ \textbf{else}\ comm \\
+          |\ \ & \textbf{repeat}\ comm\ \textbf{until}\ boolexp \\
+          |\ \ & \textbf{for}\ (intexp;\ boolexp;\ intexp) \ comm 
+\end{align*}
 
 \subsection*{Nueva sem\'antica operacional para comandos}
 
@@ -472,38 +700,33 @@ for (intexp;boolexp;intexp) comm
 
 \begin{prooftree}
     \hypo{}
-    \infer1[SEQ1]{\langle \textbf{skip}; c_1, \sigma \rangle \rightsquigarrow \langle c_1, \sigma \rangle}
+    \infer1[SEQ_1]{\langle \textbf{skip}; c_1, \sigma \rangle \rightsquigarrow \langle c_1, \sigma \rangle}
 \end{prooftree}
 
 \begin{prooftree}
     \hypo{\langle c_0, \sigma \rangle \rightsquigarrow \langle c'_0, \sigma' \rangle}
-    \infer1[SEQ2]{\langle \textbf{skip}; c_1, \sigma \rangle \rightsquigarrow \langle c'_0; c_1, \sigma' \rangle}
+    \infer1[SEQ_2]{\langle c_0; c_1, \sigma \rangle \rightsquigarrow \langle c'_0; c_1, \sigma' \rangle}
 \end{prooftree}
 
-% \begin{prooftree}
-%     \hypo{\langle b, \sigma \rangle \Downarrow_{exp} \langle \textbf{true}, \sigma' \rangle}
-%     \infer1[IF_1]{\langle \textbf{if}\ b \ \textbf{then} \ c_0 \ \textbf{else} \ c_1, \sigma \rangle \rightsquigarrow \langle c_0, \sigma' \rangle}
-% \end{prooftree}
-% \hspace{1cm}
-% \begin{prooftree}
-%     \hypo{\langle b, \sigma \rangle \Downarrow_{exp} \langle \textbf{false}, \sigma' \rangle}
-%     \infer1[IF_2]{\langle \textbf{if}\ b \ \textbf{then} \ c_0 \ \textbf{else} \ c_1, \sigma \rangle \rightsquigarrow \langle c_1, \sigma' \rangle}
-% \end{prooftree}
-% \vspace{0.25cm}
+\begin{prooftree}
+    \hypo{\langle b, \sigma \rangle \Downarrow_{exp} \langle \textbf{true}, \sigma' \rangle}
+    \infer1[IF_1]{\langle \textbf{if}\ b \ \textbf{then} \ c_0 \ \textbf{else} \ c_1, \sigma \rangle \rightsquigarrow \langle c_0, \sigma' \rangle}
+\end{prooftree}
+\hspace{1cm}
+\begin{prooftree}
+    \hypo{\langle b, \sigma \rangle \Downarrow_{exp} \langle \textbf{false}, \sigma' \rangle}
+    \infer1[IF_2]{\langle \textbf{if}\ b \ \textbf{then} \ c_0 \ \textbf{else} \ c_1, \sigma \rangle \rightsquigarrow \langle c_1, \sigma' \rangle}
+\end{prooftree}
+\vspace{0.25cm}
 
-% \begin{prooftree}
-%     \hypo{}
-%     \infer1[REPEAT_1]{\langle \textbf{repeat} \ c \ \textbf{until} \ b, \sigma \rangle \rightsquigarrow \langle c; \textbf{if} \ b \ \textbf{then skip else repeat} \ b \ \textbf{until} \ c, \sigma \rangle}
-% \end{prooftree}
-
-% \begin{prooftree}
-%     \hypo{\langle e, \sigma \rangle \Downarrow_{exp} \langle n, \sigma' \rangle}
-%     \infer1[REPEAT_2]{\langle \textbf{repeat}\ (c; e) \ \textbf{until} \ b, \sigma \rangle \rightsquigarrow }
-% \end{prooftree}
+\begin{prooftree}
+    \hypo{}
+    \infer1[REPEAT]{\langle \textbf{repeat} \ c \ \textbf{until} \ b, \sigma \rangle \rightsquigarrow \langle c; \textbf{if} \ b \ \textbf{then skip else repeat} \ b \ \textbf{until} \ c, \sigma \rangle}
+\end{prooftree}
 
 \begin{prooftree}
     \hypo{\langle e_1, \sigma \rangle \Downarrow_{exp} \langle n_1, \sigma' \rangle}
-    \infer1[FOR]{\langle \textbf{for} \ (e_1;e_2;e_3) \ c, \sigma \rangle \rightsquigarrow \langle \textbf{repeat}\ (c; e_3) \ \textbf{until} \ e_2, \sigma' \rangle}
+    \infer1[FOR]{\langle \textbf{for} \ (e_1;e_2;e_3) \ c, \sigma \rangle \rightsquigarrow \langle \textbf{if} \ e_2 \ \textbf{then} \ c \texbf{;}\ \textbf{for}\ (e_3;e_2;e_3)\ c \ \textbf{else skip}, \sigma' \rangle}
 \end{prooftree}
     
     
