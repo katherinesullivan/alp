@@ -480,26 +480,26 @@ for (intexp;boolexp;intexp) comm
     \infer1[SEQ2]{\langle \textbf{skip}; c_1, \sigma \rangle \rightsquigarrow \langle c'_0; c_1, \sigma' \rangle}
 \end{prooftree}
 
-\begin{prooftree}
-    \hypo{\langle b, \sigma \rangle \Downarrow_{exp} \langle \textbf{true}, \sigma' \rangle}
-    \infer1[IF_1]{\langle \textbf{if}\ b \ \textbf{then} \ c_0 \ \textbf{else} \ c_1, \sigma \rangle \rightsquigarrow \langle c_0, \sigma' \rangle}
-\end{prooftree}
-\hspace{1cm}
-\begin{prooftree}
-    \hypo{\langle b, \sigma \rangle \Downarrow_{exp} \langle \textbf{false}, \sigma' \rangle}
-    \infer1[IF_2]{\langle \textbf{if}\ b \ \textbf{then} \ c_0 \ \textbf{else} \ c_1, \sigma \rangle \rightsquigarrow \langle c_1, \sigma' \rangle}
-\end{prooftree}
-\vspace{0.25cm}
+% \begin{prooftree}
+%     \hypo{\langle b, \sigma \rangle \Downarrow_{exp} \langle \textbf{true}, \sigma' \rangle}
+%     \infer1[IF_1]{\langle \textbf{if}\ b \ \textbf{then} \ c_0 \ \textbf{else} \ c_1, \sigma \rangle \rightsquigarrow \langle c_0, \sigma' \rangle}
+% \end{prooftree}
+% \hspace{1cm}
+% \begin{prooftree}
+%     \hypo{\langle b, \sigma \rangle \Downarrow_{exp} \langle \textbf{false}, \sigma' \rangle}
+%     \infer1[IF_2]{\langle \textbf{if}\ b \ \textbf{then} \ c_0 \ \textbf{else} \ c_1, \sigma \rangle \rightsquigarrow \langle c_1, \sigma' \rangle}
+% \end{prooftree}
+% \vspace{0.25cm}
 
-\begin{prooftree}
-    \hypo{}
-    \infer1[REPEAT_1]{\langle \textbf{repeat} \ c \ \textbf{until} \ b, \sigma \rangle \rightsquigarrow \langle c; \textbf{if} \ b \ \textbf{then skip else repeat} \ b \ \textbf{until} \ c, \sigma \rangle}
-\end{prooftree}
+% \begin{prooftree}
+%     \hypo{}
+%     \infer1[REPEAT_1]{\langle \textbf{repeat} \ c \ \textbf{until} \ b, \sigma \rangle \rightsquigarrow \langle c; \textbf{if} \ b \ \textbf{then skip else repeat} \ b \ \textbf{until} \ c, \sigma \rangle}
+% \end{prooftree}
 
-\begin{prooftree}
-    \hypo{\langle e, \sigma \rangle \Downarrow_{exp} \langle n, \sigma' \rangle}
-    \infer1[REPEAT_2]{\langle \textbf{repeat}\ (c; e) \ \textbf{until} \ b, \sigma \rangle \rightsquigarrow }
-\end{prooftree}
+% \begin{prooftree}
+%     \hypo{\langle e, \sigma \rangle \Downarrow_{exp} \langle n, \sigma' \rangle}
+%     \infer1[REPEAT_2]{\langle \textbf{repeat}\ (c; e) \ \textbf{until} \ b, \sigma \rangle \rightsquigarrow }
+% \end{prooftree}
 
 \begin{prooftree}
     \hypo{\langle e_1, \sigma \rangle \Downarrow_{exp} \langle n_1, \sigma' \rangle}

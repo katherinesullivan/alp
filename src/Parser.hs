@@ -46,53 +46,46 @@ lis = makeTokenParser
 ----------------------------------
 --- Parser de expressiones enteras
 -----------------------------------
-intexp1 :: Parser (Exp Int)
-intexp1 = try (chainl1 intexp (do{ reservedOp lis ","; return ESeq }))
+intexp :: Parser (Exp Int)
+intexp = try (chainl1 intexp2 (do{ reservedOp lis ","; return ESeq }))
+
+intexp2 :: Parser (Exp Int)
+intexp2 = try (chainl1 intexp3 ( do{ reservedOp lis "+"; return Plus} <|> do{ reservedOp lis "-"; return Minus} ))
+
+intexp3 :: Parser (Exp Int)
+intexp3 = try (chainl1 intatom ( do{ reservedOp lis "*"; return Times} <|> do{ reservedOp lis "/"; return Div} ))
+
+intatom :: Parser (Exp Int)
+intatom = do x <- natural lis
+             return (Const (fromIntegral x :: Int))
           <|>
-          try ( do y <- identifier lis
-                   reservedOp lis "="
-                   x <- intexp
-                   return (EAssgn y x) ) -- entonces cada vez que uso el operador <|> de Parsec, el primer parser tiene que ir con un try???
-          <|>
-          try (chainl1 intexp ( do{ reservedOp lis "+"; return Plus} <|> do{ reservedOp lis "-"; return Minus} ))
-          <|>
-          try (chainl1 intexp ( do{ reservedOp lis "*"; return Times} <|> do{ reservedOp lis "/"; return Div} ))
+          do x <- identifier lis
+             return (Var x)
           <|>
           do reservedOp lis "-"
              e <- intexp
              return (UMinus e)
-          <|>
-          do y1 <- natural lis
-             return (Const y1)
-          <|>
-          do z <- identifier lis
-             return (Var z)
+          <|>     
+          try ( do x <- identifier lis
+                   reservedOp lis "="
+                   y <- intexp
+                   return (EAssgn x y) )
+          <|> parens lis intatom <|> intexp
 
-intexp :: Parser (Exp Int)
-intexp = parens lis intexp <|> intexp1
 
+          
 -----------------------------------
 --- Parser de expressiones booleanas
 ------------------------------------
 
-boolexp1 :: Parser (Exp Bool)
-boolexp1 = try (chainl1 boolexpand (do{ reservedOp lis "||"; return Or }))
-          --  <|>
-boolexpand = try (chainl1 atom (do{ reservedOp lis "&&"; return And }))
+boolexp :: Parser (Exp Bool)
+boolexp = try (chainl1 boolexpand (do{ reservedOp lis "||"; return Or }))
 
-          --  <|>
-          --  do x <- intexp 
-          --     ( try (do{ reservedOp lis "=="; return Eq })
-          --       <|>
-          --       try (do{ reservedOp lis "!="; return NEq })
-          --       <|>
-          --       try (do{ reservedOp lis "<"; return Lt })
-          --       <|> 
-          --       try (do{ reservedOp lis ">"; return Gt }) )
-          --     y <- intexp
-          --  <|>
+boolexpand :: Parser (Exp Bool)
+boolexpand = try (chainl1 boolatom (do{ reservedOp lis "&&"; return And }))
 
-atom =     do reserved lis "true"
+boolatom :: Parser (Exp Bool)
+boolatom = do reserved lis "true"
               return BTrue
            <|>
            do reserved lis "false"
@@ -101,10 +94,17 @@ atom =     do reserved lis "true"
            do reservedOp lis "!"
               x <- boolexp
               return (Not x)
-
-
-boolexp :: Parser (Exp Bool)
-boolexp = parens lis boolexp <|> boolexp1
+           <|>
+           do x <- intexp 
+              ( try (do{ reservedOp lis "=="; y <- intexp; return (Eq x y) })
+                <|>
+                try (do{ reservedOp lis "!="; y <- intexp; return (NEq x y) })
+                <|>
+                try (do{ reservedOp lis "<"; y <- intexp; return (Lt x y) })
+                <|> 
+                try (do{ reservedOp lis ">"; y <- intexp; return (Gt x y) }) )
+           <|>
+           parens lis boolatom <|> boolexp
 
 -----------------------------------
 --- Parser de comandos
@@ -112,30 +112,33 @@ boolexp = parens lis boolexp <|> boolexp1
 
 comm :: Parser Comm
 comm = try (chainl1 comm (do{ reservedOp lis ";"; return Seq }))
-       <|>
-       try ( do reserved lis "repeat"
-                x <- comm
-                reserved lis "until"
-                b <- boolexp
-                reserved lis "end"
-                return (Repeat x b) )
-       <|>
-       try ( do reserved lis "if"
-                b2 <- boolexp
-                y <- braces lis comm
-                (try (do reserved lis "else"
-                         y2 <- braces lis comm
-                         return (IfThenElse b2 y y2))
-                 <|>
-                 return (IfThen b2 y)) )
-       <|> 
-       try ( do v <- identifier lis
-                reservedOp lis "="
-                e <- intexp
-                return (Let v e) )
-       <|>
-       do reserved lis "skip"
-          return Skip
+       
+comm2 :: Parser Comm
+comm2 = try ( do reserved lis "skip"
+                 return Skip )
+        <|> 
+        try ( do v <- identifier lis
+                 reservedOp lis "="
+                 e <- intexp
+                 return (Let v e) ) 
+        <|>
+        try ( do reserved lis "repeat"
+                 x <- comm
+                 reserved lis "until"
+                 b <- boolexp
+                 reserved lis "end"
+                 return (Repeat x b) )
+        <|>
+        try ( do reserved lis "if"
+                 b2 <- boolexp
+                 y <- braces lis comm
+                 ( try (do reserved lis "else"
+                           y2 <- braces lis comm
+                           return (IfThenElse b2 y y2))
+                   <|>
+                   return (IfThen b2 y)) )
+        
+        
 
 ------------------------------------
 -- Función de parseo
