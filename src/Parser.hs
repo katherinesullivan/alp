@@ -46,43 +46,48 @@ lis = makeTokenParser
 ----------------------------------
 --- Parser de expressiones enteras
 -----------------------------------
+
 intexp :: Parser (Exp Int)
-intexp = try (chainl1 intexp2 (do{ reservedOp lis ","; return ESeq }))
+intexp = chainl1 intexp2 (do{ reservedOp lis ","; return ESeq })
 
 intexp2 :: Parser (Exp Int)
-intexp2 = try (chainl1 intexp3 ( do{ reservedOp lis "+"; return Plus} <|> do{ reservedOp lis "-"; return Minus} ))
+intexp2 = try (do x <- identifier lis
+                  reservedOp lis "="
+                  y <- intexp2
+                  return (EAssgn x y))
+          <|>
+          intexp3
 
 intexp3 :: Parser (Exp Int)
-intexp3 = try (chainl1 intatom ( do{ reservedOp lis "*"; return Times} <|> do{ reservedOp lis "/"; return Div} ))
+intexp3 = try (chainl1 intexp4 ( do{ reservedOp lis "+"; return Plus} <|> do{ reservedOp lis "-"; return Minus} ))
+
+intexp4 :: Parser (Exp Int)
+intexp4 = try (chainl1 intexp5 ( do{ reservedOp lis "*"; return Times} <|> do{ reservedOp lis "/"; return Div} ))
+
+intexp5 :: Parser (Exp Int)
+intexp5 = try (do reservedOp lis "-"
+                  e <- intexp5
+                  return (UMinus e))
+          <|>
+          intatom
 
 intatom :: Parser (Exp Int)
 intatom = do x <- natural lis
              return (Const (fromIntegral x :: Int))
           <|>
-          do x <- identifier lis
-             return (Var x)
-          <|>
-          do reservedOp lis "-"
-             e <- intexp
-             return (UMinus e)
-          <|>     
-          try ( do x <- identifier lis
-                   reservedOp lis "="
-                   y <- intexp
-                   return (EAssgn x y) )
+          try (do x <- identifier lis
+                  return (Var x))
           <|> parens lis intexp
-
-
           
 -----------------------------------
 --- Parser de expressiones booleanas
 ------------------------------------
 
 boolexp :: Parser (Exp Bool)
-boolexp = try (chainl1 boolexpand (do{ reservedOp lis "||"; return Or }))
+boolexp = chainl1 boolexpand (do{ reservedOp lis "||"; return Or })
 
 boolexpand :: Parser (Exp Bool)
-boolexpand = try (chainl1 boolatom (do{ reservedOp lis "&&"; return And }))
+boolexpand = chainl1 boolatom (do{ reservedOp lis "&&"; return And })
 
 boolatom :: Parser (Exp Bool)
 boolatom = do reserved lis "true"
