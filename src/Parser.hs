@@ -70,7 +70,7 @@ intatom = do x <- natural lis
                    reservedOp lis "="
                    y <- intexp
                    return (EAssgn x y) )
-          <|> parens lis intatom <|> intexp
+          <|> parens lis intexp
 
 
           
@@ -104,14 +104,14 @@ boolatom = do reserved lis "true"
                 <|> 
                 try (do{ reservedOp lis ">"; y <- intexp; return (Gt x y) }) )
            <|>
-           parens lis boolatom <|> boolexp
+           parens lis boolexp
 
 -----------------------------------
 --- Parser de comandos
 -----------------------------------
 
 comm :: Parser Comm
-comm = try (chainl1 comm (do{ reservedOp lis ";"; return Seq }))
+comm = chainl1 comm2 (do{ reservedOp lis ";"; return Seq })
        
 comm2 :: Parser Comm
 comm2 = try ( do reserved lis "skip"
@@ -123,10 +123,10 @@ comm2 = try ( do reserved lis "skip"
                  return (Let v e) ) 
         <|>
         try ( do reserved lis "repeat"
-                 x <- comm
+                 x <- braces lis comm -- agregamos lector de llaves
                  reserved lis "until"
                  b <- boolexp
-                 reserved lis "end"
+               --   reserved lis "end"
                  return (Repeat x b) )
         <|>
         try ( do reserved lis "if"
