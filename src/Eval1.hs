@@ -49,8 +49,6 @@ stepComm (IfThenElse b c0 c1) s = let nb :!: s' = evalExp b s
                                   in if nb then c0 :!: s' else c1 :!: s'
 stepComm c0@(Repeat c b) s = (Seq c (IfThenElse b Skip c0)) :!: s
 
--- che hay que armarlo recursivo?? Eze lo tiene recursivo pero no entiendo pq
-
 -- Evalua una expresion
 -- Completar la definición
 evalExp :: Exp a -> State -> Pair a State
