@@ -10,12 +10,17 @@ import           Common
 import           Untyped
 
 ----------------------------------------------
--- Seccón 2 - Representacón de Lambda Términos 
+-- Sección 2 - Representacón de Lambda Términos 
 -- Ejercicio 1
 ----------------------------------------------
 
+-- Función que dado un entero devuelve la expresión en λ-cálculo de su numeral de Church.
 num :: Integer -> LamTerm
-num = undefined
+num n = numAux n (LVar "z")
+
+numAux :: Integer -> LamTerm -> LamTerm
+numAux n term | n == 0 = Abs "s" (Abs "z" term)
+              | otherwise = numAux (n-1) (App (LVar "s") term)
 
 -------------------------------------------------
 -- Parser de Lambda Cálculo (Gramatica Extendida) 
