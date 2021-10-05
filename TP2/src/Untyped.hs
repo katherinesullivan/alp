@@ -5,7 +5,7 @@ import           Data.List
 import           Data.Maybe
 
 import           Common
-import StringBuffer (StringBuffer(len))
+-- import StringBuffer (StringBuffer(len))
 
 ----------------------------------------------
 -- Sección 2  
@@ -52,52 +52,56 @@ eval' _          _         = undefined
 -- Ejercicio 5
 --------------------------------
 
--- quote :: Value -> Term
--- quote val = quoteAux val 0
+quote :: Value -> Term
+quote val = replace (quoteAux val 0) 0
 
--- quoteAux :: Value -> Int -> Term
--- quoteAux (VNeutral (NFree var)) idx = Free var
--- quoteAux (VNeutral (NApp neu val)) idx = quoteAux (VNeutral neu) idx :@: quoteAux val idx
+quoteAux :: Value -> Int -> Term
+quoteAux (VNeutral (NFree var)) idx = Free var
+quoteAux (VNeutral (NApp neu val)) idx = quoteAux (VNeutral neu) idx :@: quoteAux val idx
+quoteAux (VLam fun) idx = Lam (quoteAux (fun (VNeutral (NFree (Quote idx)))) (idx+1))
+
 -- quoteAux (VLam fun) idx = let term = quoteAux (fun (VNeutral (NFree (Quote idx)))) (idx+1)
---                           in Lam (replace term)
+                        --   in Lam (replace term 1)
 
 -- replace :: Term -> Term
 -- replace (Free (Quote k)) = Bound (i - k - 1) -- me falta el i
 -- replace x = x
 
 
-quote :: Value -> Term
-quote val = fst (quote2 val 0)
+-- quote :: Value -> Term
+-- quote val = fst (quote2 val 0)
 
+-- quote2 :: Value -> Int -> (Term, Int)
+-- quote2 (VNeutral (NFree var)) idx = (Free var, idx)
+-- quote2 (VNeutral (NApp neu val)) idx = (fst (quote2 (VNeutral neu) idx) :@: fst (quote2 val idx), idx)
+-- quote2 (VLam abs) idx = let (term, total) = quote2 (abs (VNeutral (NFree (Quote idx)))) (idx+1)
+--                         in (Lam (replace term 1), total)
 
-quote2 :: Value -> Int -> (Term, Int)
-quote2 (VNeutral (NFree var)) idx = (Free var, idx)
-quote2 (VNeutral (NApp neu val)) idx = (fst (quote2 (VNeutral neu) idx) :@: fst (quote2 val idx), idx)
-quote2 (VLam fun) idx = let (term, total) = quote2 (fun (VNeutral (NFree (Quote idx)))) (idx+1)
-                        in (Lam (replace term total), total)
+-- replace :: Term -> Int -> Term
+-- replace (Free (Quote k)) i = Bound (i - k - 1)
+-- replace x _ = x
 
-
-replace :: Term -> Int -> Term
+replace :: Term -> Int -> Term 
 replace (Free (Quote k)) i = Bound (i - k - 1)
-replace x _ = x
+replace (Free x) _ = Free x
+replace (t1 :@: t2) i = replace t1 i :@: replace t2 i
+replace (Lam t) i = Lam (replace t (i+1))
+replace x _ = x -- caso x == Bound n, no deberia ocurrir
 
 
--- ejemplo :: Value -> Value 
--- -- ejemplo (VLam fun) = VLam (\ x -> VNeutral (NApp (x) (VLam (\ y -> VNeutral (NApp (x) y)))))
--- ejemplo (VNeutral x) = VNeutral (NApp x (VLam (ejemplo2 x)))
+ejemplo :: Value -> Value 
+-- ejemplo (VLam fun) = VLam (\ x -> VNeutral (NApp (x) (VLam (\ y -> VNeutral (NApp (x) y)))))
+ejemplo (VNeutral x) = VNeutral (NApp x (VLam (ejemplo2 x)))
 
 
--- ejemplo2 :: Neutral -> Value -> Value 
--- ejemplo2 x y = VNeutral (NApp x y)
+ejemplo2 :: Neutral -> Value -> Value
+ejemplo2 x y = VNeutral (NApp x y)
 
 
 
 
 esPrimo :: Int -> Bool 
 esPrimo n = [x | x <- [1..n], mod n x == 0] == [1,n]
-
-
-
 
 isprime :: Int -> Bool
 isprime 1 = False
