@@ -24,9 +24,13 @@ def is0 = \n . n (\ x . false) true
 def add = \n m s z . n s (m s z)
 def mult = \n m s z . n (m s) z
 
+-- Usando la forma que tienen los naturales al repersentarlos como Numerales de Church:
+-- def add = \n m . m suc n
+-- def mult = \n m . m (suma n) zero
+
 def pred = \ n . fst (n (\p . pair (snd p) (suc (snd p))) (pair zero zero))
 
---Listas
+-- Listas
 def nil = \c n . n
 def cons = \x xs c n . c x (xs c n)
 
