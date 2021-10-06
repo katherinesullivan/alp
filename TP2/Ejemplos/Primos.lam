@@ -1,0 +1,34 @@
+esPrimo :: Int -> Bool 
+esPrimo n = [x | x <- [1..n], mod n x == 0] == [1,n]
+
+
+isprime :: Int -> Bool
+isprime n = isprimerec n (n-1) -- el n-1 podria ser un (floor (sqrt n))
+
+isprimerec :: Int -> Int -> Bool
+isprimerec n t = if t == 1 || n == 1 then True else if (n `mod` t) == 0 then False else isprimerec n (t-1)
+
+
+{- En lambda calculo:
+
+-- el pred n podria ser floor (srqt n)
+def isprime = \ n . isprimerec n (pred n)
+
+def isprimerec = Y (\ f n t . ( or (is0 (pred t)) (is0 (pred n)) ) true ( (is0 (mod n t)) false (f n (pred t)) ))
+
+-}
+
+
+myMod :: Int -> Int -> Int 
+myMod x y = x - y * div x y -- (division entera)
+ 
+
+def mod = \ x y . 
+
+
+def zero = \s z . z
+def suc = \n s z . s (n s z)
+
+def pred = \ n . fst (n (\p . pair (snd p) (suc (snd p))) (pair zero zero))
+def add = \n m . m suc n
+def resta = \ n m . 

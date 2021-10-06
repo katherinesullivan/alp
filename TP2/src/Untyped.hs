@@ -100,14 +100,3 @@ ejemplo2 x y = VNeutral (NApp x y)
 
 
 
-esPrimo :: Int -> Bool 
-esPrimo n = [x | x <- [1..n], mod n x == 0] == [1,n]
-
-isprime :: Int -> Bool
-isprime 1 = False
-isprime 2 = True
-isprime n = isprimerec n (n-1)
-
-isprimerec :: Int -> Int -> Bool
-isprimerec _ 1 = False
-isprimerec n t = if (n `rem` t) == 0 then False else isprimerec n (n-1)
