@@ -44,8 +44,12 @@ eval e t = eval' t (e, [])
 
 eval' :: Term -> (NameEnv Value, [Value]) -> Value
 eval' (Bound ii) (_, lEnv) = lEnv !! ii
-eval' _          _         = undefined
-
+-- eval' (t1@(t1' :@: t1'') :@: t2) (e, lEnv) = vapp (eval' t1 (e,lEnv)
+-- modif de alguna manera el environment y dsp eval de t2 but how
+eval' (t1 :@: t2) (e, lEnv) = vapp (eval' t1 (e,lEnv)) (eval' t2 (e,lEnv))
+eval' (Lam t) (e, lEnv) = VLam (eval' t (e,lEnv))
+--eval' ((Lam t1) :@: t2) (e, lEnv) = crear fc sustit y agg var lambda 
+eval' (Free name) (e, lEnv) = VNeutral (NFree name) -- change nameenv value?
 
 --------------------------------
 -- Sección 4 - Mostrando Valores
