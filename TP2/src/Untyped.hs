@@ -5,6 +5,7 @@ import           Data.List
 import           Data.Maybe
 
 import           Common
+import Language.Haskell.TH (InjectivityAnn)
 -- import StringBuffer (StringBuffer(len))
 
 ----------------------------------------------
@@ -44,13 +45,31 @@ eval e t = eval' t (e, [])
 
 eval' :: Term -> (NameEnv Value, [Value]) -> Value
 eval' (Bound ii) (_, lEnv) = lEnv !! ii
--- eval' (t1@(t1' :@: t1'') :@: t2) (e, lEnv) = vapp (eval' t1 (e,lEnv)
+eval' (t1@(t1' :@: t1'') :@: t2) (e, lEnv) = eval' (eval' t1 (e,lEnv)
 -- modif de alguna manera el environment y dsp eval de t2 but how
 eval' (t1 :@: t2) (e, lEnv) = vapp (eval' t1 (e,lEnv)) (eval' t2 (e,lEnv))
-eval' (Lam t) (e, lEnv) = VLam (eval' t (e,lEnv))
+eval' (Lam t) (e, lEnv) = VLam (eval' t (e,:lEnv)) --agg la variable binding cual sera?
 --eval' ((Lam t1) :@: t2) (e, lEnv) = crear fc sustit y agg var lambda 
-eval' (Free name) (e, lEnv) = VNeutral (NFree name) -- change nameenv value?
+eval' (Free name) (e, lEnv) = case find (\(a,_) -> a == name) e of
+                                  Nothing -> perror "variable global inexistente"
+                                  Just (_,v) -> v
 
+-- fc aparte app
+
+
+-- sustitucion
+
+shift :: Int -> Int -> Term -> Term
+shift i c (Bound ii) = if ii < c then Bound ii else Bound ii+i
+shift i c (Lam t) = Lam (shift i (c+1) t)
+shift i c (t1 :@: t2) = shift i c t1 :@: shift i c t2
+shift i c (Free name) = Free name
+
+sust :: Term -> Term -> Int -> Term 
+sust (Bound n) t1 m = if n == m then t1 else Bound n
+sust (Lam t) t1 m = Lam (sust t (shift 1 0 t) (m+1))
+sust (t :@: t') t1 m = sust t t1 m :@: sust t' t1 m
+sust (Free name) _ _ = Free name
 --------------------------------
 -- Sección 4 - Mostrando Valores
 -- Ejercicio 5
@@ -104,3 +123,49 @@ ejemplo2 x y = VNeutral (NApp x y)
 
 
 
+esPrimo :: Int -> Bool 
+esPrimo n = [x | x <- [1..n], mod n x == 0] == [1,n]
+
+isprime :: Int -> Bool
+isprime 1 = False
+isprime 2 = True
+isprime n = isprimerec n (n-1)
+
+isprimerec :: Int -> Int -> Bool
+isprimerec _ 1 = False
+isprimerec n t = if (n `rem` t) == 0 then False else isprimerec n (n-1)
+
+{-
+esPrimo :: Int -> Bool 
+esPrimo n = [x | x <- [1..n], mod n x == 0] == [1,n]
+
+
+isprime :: Int -> Bool
+isprime n = isprimerec n (n-1) -- el n-1 podria ser un (floor (sqrt n))
+
+isprimerec :: Int -> Int -> Bool
+isprimerec n t = if t == 1 || n == 1 then True else if (n mod t) == 0 then False else isprimerec n (t-1)
+
+
+En lambda calculo:
+
+-- el pred n podria ser floor (srqt n)
+def isprime = \ n . isprimerec n (pred n)
+
+def isprimerec = Y (\ f n t . ( or (is0 (pred t)) (is0 (pred n)) ) true ( (is0 (mod n t)) false (f n (pred t)) ))
+
+
+def resta = \ n m . m pred n
+
+myMod :: Int -> Int -> Int 
+myMod x y = if x <= y then x else myMod (x - y) y
+
+lt :: Int -> Int -> Bool -- x <= y
+lt x y = if x == 0 then True else if y == 0 then False else lt (x-1) (y-1)
+
+
+
+def mod = Y ( \ f x y . ( lt x y ) x ( f (resta x y) y ) )
+
+def lt = Y ( \ f x y . (is0 x) true ( (is0 y) false ( f (pred x) (pred y) ) ) )
+-}
