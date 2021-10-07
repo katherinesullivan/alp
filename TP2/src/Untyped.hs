@@ -43,13 +43,15 @@ vapp (VNeutral neu) val = VNeutral (NApp neu val)
 eval :: NameEnv Value -> Term -> Value
 eval e t = eval' t (e, [])
 
+-- como hacer las 2 apps 
+-- como agregar en E-ABS
 eval' :: Term -> (NameEnv Value, [Value]) -> Value
 eval' (Bound ii) (_, lEnv) = lEnv !! ii
-eval' (t1@(t1' :@: t1'') :@: t2) (e, lEnv) = eval' (eval' t1 (e,lEnv)
+--eval' (t1@(t1' :@: t1'') :@: t2) (e, lEnv) = eval' (eval' t1 (e,lEnv)
 -- modif de alguna manera el environment y dsp eval de t2 but how
 eval' (t1 :@: t2) (e, lEnv) = vapp (eval' t1 (e,lEnv)) (eval' t2 (e,lEnv))
 eval' (Lam t) (e, lEnv) = VLam (eval' t (e,:lEnv)) --agg la variable binding cual sera?
---eval' ((Lam t1) :@: t2) (e, lEnv) = crear fc sustit y agg var lambda 
+eval' ((Lam t1) :@: t2) (e, lEnv) = sust t1 t2 0
 eval' (Free name) (e, lEnv) = case find (\(a,_) -> a == name) e of
                                   Nothing -> perror "variable global inexistente"
                                   Just (_,v) -> v
