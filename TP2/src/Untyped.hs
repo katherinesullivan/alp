@@ -69,6 +69,19 @@ replace (t1 :@: t2) i = replace t1 i :@: replace t2 i
 replace (Lam t) i = Lam (replace t (i+1))
 replace x _ = x -- caso x == Bound n, no deberia ocurrir
 
+quoteAux2 :: Value -> Int -> Term
+quoteAux2 (VNeutral (NFree var)) idx = Free var
+quoteAux2 (VNeutral (NApp neu val)) idx = quoteAux2 (VNeutral neu) idx :@: quoteAux2 val idx
+quoteAux2 (VLam fun) idx = Lam (quoteAux2 (fun (VNeutral (NFree (Quote idx)))) (idx+1))
+
+-- replace :: Term -> Int -> Term 
+-- replace (Free (Quote k)) i = Bound (i - k - 1)
+-- replace (Free x) _ = Free x
+-- replace (t1 :@: t2) i = replace t1 i :@: replace t2 i
+-- replace (Lam t) i = Lam (replace t (i+1))
+-- replace x _ = x -- caso x == Bound n, no deberia ocurrir
+
+
 {-
 ejemplo :: Value -> Value 
 -- ejemplo (VLam fun) = VLam (\ x -> VNeutral (NApp (x) (VLam (\ y -> VNeutral (NApp (x) y)))))
