@@ -1,13 +1,19 @@
--- Función esPrimo
-def isprime = \ n . isprimerec n (pred n)
-
-def isprimerec = Y (\ f n t . ( or (is0 (pred t)) (is0 (pred n)) ) true ( (is0 (mod n t)) false (f n (pred t)) ))
+-- Función Menor o Igual A (<=)
+def lt = Y ( \ f x y . (is0 x) true ( (is0 y) false ( f (pred x) (pred y) ) ) )
 
 -- Función Resta, resta x y == x - y
 def resta = \ n m . m pred n
 
 -- Función Módulo
-def mod = Y ( \ f x y . ( lt x y ) x ( f (resta x y) y ) )
+def mod = Y ( \ f x y . ( lt x y ) ((is0 (resta y x)) 0 x) (f (resta x y) y) )
 
--- Función Menor o Igual A (<=)
-def lt = Y ( \ f x y . (is0 x) true ( (is0 y) false ( f (pred x) (pred y) ) ) )
+-- Función Raíz Cuadrada Entera (piso de la raíz cuadrada)
+def sqrt' = Y ( \ f n i . (lt (mult i i) n) (f n (suc i)) (pred i) )
+def sqrt = \ n . (or (is0 n) (is0 (pred n))) n (sqrt' n 2)
+
+-- Función esPrimo
+def isprimerec = Y (\ f n t . ( or (is0 (pred t)) (is0 (pred n)) ) true ( (is0 (mod n t)) false (f n (pred t)) ))
+
+def isprime = \ n . isprimerec n (sqrt n)
+
+     
