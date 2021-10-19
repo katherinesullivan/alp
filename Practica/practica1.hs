@@ -14,7 +14,7 @@ transformador p = p
                   do string "("
                      result <- p
                      string ")"
-                     return
+                     return result
 
 
 -- EJERCICIO 4
@@ -84,8 +84,8 @@ either' = do x <- int
 
 hetList :: Parser HetList
 hetList = do char '['
-             x <- either'
-             xs <- many (do{ token (char ','); either' })
+             x <- either' 
+             xs <- many (do{ token (char ','); either' }) -- comportamiento muy similar a lo que hace sepBy
              char ']'             
              return (x:xs)
 
