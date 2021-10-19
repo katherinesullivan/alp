@@ -1,3 +1,25 @@
+-- EJERCICIO 10
+
+{-
+Definición a)
+def zero = \ x . false
+def suc = \ n . pair true n
+
+Queremos que:
+isNotZero zero =\beta false
+isNotZero (suc n) =\beta true
+
+def isNotZero = \ n . n true -- isNotZero == fst
+def isZero = not isNotZero
+
+Queremos que:
+pred zero = zero
+pred (suc n) = n
+
+def pred = \ n . (isZero n) n (snd n)
+
+-}
+
 -- EJERCICIO 13
 
 {-
