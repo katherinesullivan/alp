@@ -24,6 +24,7 @@ conversion' :: [String] -> LamTerm -> Term
 conversion' b (LVar n    ) = maybe (Free (Global n)) Bound (n `elemIndex` b)
 conversion' b (LApp t u  ) = conversion' b t :@: conversion' b u
 conversion' b (LAbs n t u) = Lam t (conversion' (n : b) u)
+conversion' b (LLet x t u) = Let (Global x) (conversion' b t) (conversion' b u)
 
 
 -----------------------
@@ -47,6 +48,12 @@ eval e (Lam t u1 :@: u2) = let v2 = eval e u2 in eval e (sub 0 (quote v2) u1)
 eval e (u        :@: v      ) = case eval e u of
   VLam t u' -> eval e (Lam t u' :@: v)
   _         -> error "Error de tipo en run-time, verificar type checker"
+eval e (Let n u1 u2) = let v = eval e u1
+                           t = infer e u1
+                       in case t of
+                            Right t' -> eval ((n, (v, t')):e) u2
+                            Left s -> error "Error de tipo en run-time, verificar type checker"
+
 
 
 -----------------------
