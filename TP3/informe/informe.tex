@@ -91,7 +91,7 @@ Tomemos $\Gamma = \{x: E \to E \to E, \ y: E \to E, \ z: E\}$
 
 \vspace{0.3cm}
 
-\hspace{-0.85cm}\begin{prooftree}
+\hspace{-0.95cm}\begin{prooftree}
     \hypo{x: E \to E \to E \in \Gamma}
     \infer1[(T-VAR)]{\Gamma \vdash x: E \to E \to E}
     \hypo{z: E \in \Gamma}
@@ -108,13 +108,16 @@ Tomemos $\Gamma = \{x: E \to E \to E, \ y: E \to E, \ z: E\}$
     
     \infer1[(T-ABS)]{\{x: E \to E \to E, \ y: E \to E\} \vdash \lambda z: E \cdot (x\ z) \ (y \ z) : E \to E}
     
-    \infer1[(T-ABS)]{\{x: E \to E \to E \} \vdash \lambda y: E \to E \cdot \lambda z: E \cdot (x \ z) \ (y \ z): E \to E \to E \to E}
+    \infer1[(T-ABS)]{\{x: E \to E \to E \} \vdash \lambda y: E \to E \cdot \lambda z: E \cdot (x \ z) \ (y \ z): (E \to E) \to E \to E}
     
-    \infer1[(T-ABS)]{\vdash \lambda x: E \to E \to E \cdot \lambda y: E \to E \cdot \lambda z: E \cdot (x \ z) \ (y \ z): E \to E \to E \to E \to E \to E \to E}
+    \infer1[(T-ABS)]{\vdash \lambda x: E \to E \to E \cdot \lambda y: E \to E \cdot \lambda z: E \cdot (x \ z) \ (y \ z): (E \to E \to E) \to (E \to E) \to E \to E}
     
 \end{prooftree}
 
 \section*{Ejercicio 2}
 
+La función \textit{infer} retorna un valor de tipo \textit{Either String Type} para poder retornar el tipo deseado en caso de que se haya podido realizar una inferencia de manera correcta, o una string que explique el error en caso de encontrarse con uno. 
+
+La función $(>>=)$ toma un dato del tipo \textit{Either String Type} y una función que dado un \textit{Type} devuelve un \textit{Either String Type}. Nuestra función chequea si el dato pasado es un \textit{String} (en nuestra implementación entendámoslo como un error), si es el caso, no hace nada con este dato (simplemente propaga el error), en cambio, si el dato pasado es un \textit{Type} le aplica la función pasada a este y $(>>=)$ devuelve ese resultado.
 
 \end{document}

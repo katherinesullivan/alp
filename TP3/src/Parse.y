@@ -44,7 +44,11 @@ Exp     :: { LamTerm }
         
 NAbs    :: { LamTerm }
         : NAbs Atom                    { LApp $1 $2 }
-        | Atom                         { $1 }
+        | NLet                         { $1 }
+
+NLet    :: { LamTerm }
+        : 'Let' VAR '=' Exp 'in' Exp    { LLet $2 $4 $6 }
+        | Atom                          { $1 }
 
 Atom    :: { LamTerm }
         : VAR                          { LVar $1 }  
