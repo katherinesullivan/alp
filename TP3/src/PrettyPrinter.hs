@@ -27,8 +27,8 @@ pp ii vs (Bound k         ) = text (vs !! (ii - k - 1))
 pp _  _  (Free  (Global s)) = text s
 
 pp ii vs (i :@: c         ) = sep
-  [ parensIf (isLam i) (pp ii vs i)
-  , nest 1 (parensIf (isLam c || isApp c) (pp ii vs c))
+  [ parensIf (isLam i || isLet i) (pp ii vs i)
+  , nest 1 (parensIf (isLam c || isApp c || isLet c) (pp ii vs c))
   ]
 pp ii vs (Lam t c) =
   text "\\"
@@ -37,6 +37,17 @@ pp ii vs (Lam t c) =
     <> printType t
     <> text ". "
     <> pp (ii + 1) vs c
+pp ii vs (Let (Global s) t1 t2) = text "Let "
+                                  <>
+                                  text s
+                                  <>
+                                  text " = "
+                                  <>
+                                  pp ii vs t1
+                                  <>
+                                  text " in "
+                                  <>
+                                  pp ii vs t2
 
 
 isLam :: Term -> Bool
@@ -46,6 +57,10 @@ isLam _         = False
 isApp :: Term -> Bool
 isApp (_ :@: _) = True
 isApp _         = False
+
+isLet :: Term -> Bool 
+isLet (Let _ _ _) = True 
+isLet _           = False
 
 -- pretty-printer de tipos
 printType :: Type -> Doc
@@ -63,6 +78,7 @@ fv (Bound _         ) = []
 fv (Free  (Global n)) = [n]
 fv (t   :@: u       ) = fv t ++ fv u
 fv (Lam _   u       ) = fv u
+fv (Let (Global n) t1 t2) = [n] ++ fv t1 ++ fv t2
 
 ---
 printTerm :: Term -> Doc

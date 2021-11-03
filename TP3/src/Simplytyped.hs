@@ -37,6 +37,7 @@ sub _ _ (Bound j) | otherwise = Bound j
 sub _ _ (Free n   )           = Free n
 sub i t (u   :@: v)           = sub i t u :@: sub i t v
 sub i t (Lam t'  u)           = Lam t' (sub (i + 1) t u)
+sub i t (Let n t1 t2)         = Let n (sub i t t1) (sub i t t2)
 
 -- evaluador de términos
 eval :: NameEnv Value Type -> Term -> Value
@@ -53,7 +54,6 @@ eval e (Let n u1 u2) = let v = eval e u1
                        in case t of
                             Right t' -> eval ((n, (v, t')):e) u2
                             Left s -> error "Error de tipo en run-time, verificar type checker"
-
 
 
 -----------------------
@@ -108,5 +108,8 @@ infer' c e (t :@: u) = infer' c e t >>= \tt -> infer' c e u >>= \tu ->
     FunT t1 t2 -> if (tu == t1) then ret t2 else matchError t1 tu
     _          -> notfunError tt
 infer' c e (Lam t u) = infer' (t : c) e u >>= \tu -> ret $ FunT t tu
+infer' c e (Let n t1 t2) = infer' c e t1 >>= \tt1 -> infer' c ((n,(VLam EmptyT t1,tt1)) : e) t2 >>= ret
+
+-- el valor con el que crago la variable libre en el entorno puede ser cualquiera total no lo uso (?
 
 ----------------------------------
