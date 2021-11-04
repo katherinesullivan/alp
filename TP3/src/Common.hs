@@ -21,6 +21,7 @@ module Common where
   data Type = EmptyT 
             | FunT Type Type
             | Nat
+            | ListNat
 
             deriving (Show, Eq)
   
@@ -32,6 +33,9 @@ module Common where
                 |  LZero
                 |  LSuc LamTerm
                 |  LR LamTerm LamTerm LamTerm
+                |  LNil
+                |  LCons LamTerm LamTerm
+                |  LRL LamTerm LamTerm LamTerm
        deriving (Show, Eq)
 
 
@@ -44,13 +48,19 @@ module Common where
              | Zero
              | Suc Term
              | R Term Term Term
+             | Nil
+             | Cons Term Term
+             | RL Term Term Term
        deriving (Show, Eq)
 
   -- Valores
   data VN = VZero | VSuc VN
         deriving (Show, Eq)
 
-  data Value = VLam Type Term | Num VN
+  data VL = VNil | VCons VN VL
+        deriving (Show, Eq)
+
+  data Value = VLam Type Term | Num VN | List VL
           deriving (Show, Eq)
 
 

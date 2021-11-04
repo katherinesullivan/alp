@@ -1,0 +1,4 @@
+def aux = \ f : algo . \ n : Nat . R Nil (sumPos ) n
+
+def t2 = \ x : Nat . \ xs : ListNat . \ r : ListNat . 
+def sumPos = \ l : ListNat . RL Nil t2

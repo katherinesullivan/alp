@@ -25,12 +25,18 @@ import Data.Char
     VAR     { TVar $$ }
     TYPEE   { TTypeE }
     DEF     { TDef }
+    'Let'   { TLet }
+    'in'    { TIn }
+    TYPENAT { TTypeNat }
+    '0'     { TZero }
+    'suc'   { TSuc }
+    'R'     { TR }
     
 
 %right VAR
 %left '=' 
 %right '->'
-%right '\\' '.' 
+%right '\\' '.' 'Let' 'in'
 
 %%
 
@@ -40,19 +46,24 @@ Defexp  : DEF VAR '=' Exp              { Def $2 $4 }
 
 Exp     :: { LamTerm }
         : '\\' VAR ':' Type '.' Exp    { LAbs $2 $4 $6 }
-        | NAbs                         { $1 }
+        | Let                          { $1 }
         
+Let     :: { LamTerm } 
+        : 'Let' VAR '=' Exp 'in' Exp   { LLet $2 $4 $6 } 
+        | NAbs                         { $1 } 
+
 NAbs    :: { LamTerm }
         : NAbs Atom                    { LApp $1 $2 }
-        | NLet                         { $1 }
-
-NLet    :: { LamTerm }
-        : 'Let' VAR '=' Exp 'in' Exp    { LLet $2 $4 $6 }
-        | Atom                          { $1 }
+        | Atom                         { $1 } 
 
 Atom    :: { LamTerm }
         : VAR                          { LVar $1 }  
+        | Nat                          { $1 }
         | '(' Exp ')'                  { $2 }
+
+Nat     :: { LamTerm }
+        : '0'                          { LZero }
+        | 'suc' Nat                    { LSuc $2 }
 
 Type    : TYPEE                        { EmptyT }
         | Type '->' Type               { FunT $1 $3 }
@@ -101,6 +112,8 @@ data Token = TVar String
                | TArrow
                | TEquals
                | TEOF
+               | TLet
+               | TIn
                deriving Show
 
 ----------------------------------
