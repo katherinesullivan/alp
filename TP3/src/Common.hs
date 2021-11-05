@@ -44,7 +44,7 @@ module Common where
              | Free Name 
              | Term :@: Term
              | Lam Type Term
-             | Let Name Term Term
+             | Let Term Term
              | Zero
              | Suc Term
              | R Term Term Term

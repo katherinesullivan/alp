@@ -24,7 +24,8 @@ conversion' :: [String] -> LamTerm -> Term
 conversion' b (LVar n) = maybe (Free (Global n)) Bound (n `elemIndex` b)
 conversion' b (LApp t u) = conversion' b t :@: conversion' b u
 conversion' b (LAbs n t u) = Lam t (conversion' (n : b) u)
-conversion' b (LLet x t u) = Let (Global x) (conversion' b t) (conversion' b u)
+conversion' b (LLet x t u) = Let (conversion' b t) (conversion' (x : b) u)
+  -- Let (conversion' b (LVar x)) (conversion' b t) (conversion' b u)
 conversion' b LZero        = Zero
 conversion' b (LSuc n)     = Suc (conversion' b n)
 conversion' b (LR t1 t2 n) = R (conversion' b t1) (conversion' b t2) (conversion' b n)
@@ -42,7 +43,7 @@ sub _ _ (Bound j) | otherwise = Bound j
 sub _ _ (Free n   )           = Free n
 sub i t (u   :@: v)           = sub i t u :@: sub i t v
 sub i t (Lam t'  u)           = Lam t' (sub (i + 1) t u)
-sub i t (Let n t1 t2)         = Let n (sub i t t1) (sub i t t2)
+sub i t (Let t1 t2)           = Let (sub i t t1) (sub (i + 1) t t2)
 sub i t Zero                  = Zero 
 sub i t (Suc n)               = Suc (sub i t n)
 sub i t (R t1 t2 n)           = R (sub i t t1) (sub i t t2) (sub i t n)
@@ -60,11 +61,8 @@ eval e (Lam t u1 :@: u2) = let v2 = eval e u2 in eval e (sub 0 (quote v2) u1)
 eval e (u        :@: v      ) = case eval e u of
   VLam t u' -> eval e (Lam t u' :@: v)
   _         -> error "Error de tipo en run-time, verificar type checker"
-eval e (Let n u1 u2) = let v = eval e u1
-                           t = infer e u1
-                       in case t of
-                            Right t' -> eval ((n, (v, t')):e) u2
-                            Left s -> error "Error de tipo en run-time, verificar type checker"
+eval e (Let u1 u2) = let v = eval e u1
+                     in eval e (sub 0 (quote v) u2)
 eval e Zero = Num VZero 
 eval e (Suc n) = case eval e n of
                     Num x -> Num (VSuc x)
@@ -144,7 +142,7 @@ infer' c e (t :@: u) = infer' c e t >>= \tt -> infer' c e u >>= \tu ->
     FunT t1 t2 -> if (tu == t1) then ret t2 else matchError t1 tu
     _          -> notfunError tt
 infer' c e (Lam t u) = infer' (t : c) e u >>= \tu -> ret $ FunT t tu
-infer' c e (Let n t1 t2) = infer' c e t1 >>= \tt1 -> infer' c ((n,(VLam EmptyT t1,tt1)) : e) t2 >>= ret -- el valor con el que cargo la variable libre en el entorno puede ser cualquiera total no lo uso (?
+infer' c e (Let t1 t2) = infer' c e t1 >>= \tt1 -> infer' (tt1:c) e t2 >>= \tt2 -> ret tt2
 infer' c e Zero = ret Nat
 infer' c e (Suc t) = infer' c e t >>= \tt -> 
   case tt of 

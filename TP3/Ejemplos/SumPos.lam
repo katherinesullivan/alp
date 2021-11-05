@@ -1,4 +1,13 @@
-def aux = \ f : algo . \ n : Nat . R Nil (sumPos ) n
+def t = \ r : Nat . \ x : Nat . suc r
+def suma = \ x : Nat . \ y : Nat . R y t x
 
-def t2 = \ x : Nat . \ xs : ListNat . \ r : ListNat . 
-def sumPos = \ l : ListNat . RL Nil t2
+def pred = \ n : Nat . R 0 (\ r : Nat . \ x : Nat . x) n
+
+def u = \ r : Nat . \ y : Nat . pred r
+def resta = \ x : Nat . \ y : Nat . R x u y
+
+def length = \ l : ListNat . RL 0 (\ x : Nat . \ y : ListNat . \ z : Nat . suc z) l
+
+def sumPosAux = \ l : ListNat . \ c : Nat . RL nil (\ x : Nat . \ y : ListNat . \ r : ListNat . cons (suma x (resta c (length y))) r) l
+
+def sumPos = \ l : ListNat . sumPosAux l (length l)

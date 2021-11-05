@@ -24,19 +24,28 @@ import Data.Char
     '->'    { TArrow }
     VAR     { TVar $$ }
     TYPEE   { TTypeE }
+    TYPENat { TTypeNat }
+    TYPEListNat { TTypeListNat }
     DEF     { TDef }
     'Let'   { TLet }
     'in'    { TIn }
-    TYPENAT { TTypeNat }
     '0'     { TZero }
     'suc'   { TSuc }
     'R'     { TR }
+    'nil'   { TNil }
+    'cons'  { TCons }
+    'RL'    { TRL }
     
 
-%right VAR
+%right VAR 'nil' '0'
 %left '=' 
 %right '->'
+%right 'suc'
+%right 'cons'
+%left 'RL'
+%left 'R'
 %right '\\' '.' 'Let' 'in'
+
 
 %%
 
@@ -46,26 +55,26 @@ Defexp  : DEF VAR '=' Exp              { Def $2 $4 }
 
 Exp     :: { LamTerm }
         : '\\' VAR ':' Type '.' Exp    { LAbs $2 $4 $6 }
-        | Let                          { $1 }
+        | 'Let' VAR '=' Exp 'in' Exp   { LLet $2 $4 $6 } 
+        | 'suc' Exp                    { LSuc $2 }
+        | 'cons' Atom Exp              { LCons $2 $3 }
+        | 'RL' Atom Atom Exp           { LRL $2 $3 $4 }
+        | 'R' Atom Atom Exp            { LR $2 $3 $4 }
+        | NAbs                         { $1 }
         
-Let     :: { LamTerm } 
-        : 'Let' VAR '=' Exp 'in' Exp   { LLet $2 $4 $6 } 
-        | NAbs                         { $1 } 
-
 NAbs    :: { LamTerm }
         : NAbs Atom                    { LApp $1 $2 }
         | Atom                         { $1 } 
 
 Atom    :: { LamTerm }
         : VAR                          { LVar $1 }  
-        | Nat                          { $1 }
+        | '0'                          { LZero }
+        | 'nil'                        { LNil }
         | '(' Exp ')'                  { $2 }
 
-Nat     :: { LamTerm }
-        : '0'                          { LZero }
-        | 'suc' Nat                    { LSuc $2 }
-
 Type    : TYPEE                        { EmptyT }
+        | TYPENat                      { Nat }
+        | TYPEListNat                  { ListNat }
         | Type '->' Type               { FunT $1 $3 }
         | '(' Type ')'                 { $2 }
 
@@ -114,6 +123,14 @@ data Token = TVar String
                | TEOF
                | TLet
                | TIn
+               | TZero
+               | TSuc
+               | TR
+               | TNil
+               | TCons 
+               | TRL
+               | TTypeNat
+               | TTypeListNat
                deriving Show
 
 ----------------------------------
@@ -123,8 +140,9 @@ lexer cont s = case s of
                     (c:cs)
                           | isSpace c -> lexer cont cs
                           | isAlpha c -> lexVar (c:cs)
+                          | c == '0' -> cont TZero cs
                     ('-':('-':cs)) -> lexer cont $ dropWhile ((/=) '\n') cs
-                    ('{':('-':cs)) -> consumirBK 0 0 cont cs	
+                    ('{':('-':cs)) -> consumirBK 0 0 cont cs
                     ('-':('}':cs)) -> \ line -> Failed $ "Línea "++(show line)++": Comentario no abierto"
                     ('-':('>':cs)) -> cont TArrow cs
                     ('\\':cs)-> cont TAbs cs
@@ -136,18 +154,29 @@ lexer cont s = case s of
                     ('=':cs) -> cont TEquals cs
                     unknown -> \line -> Failed $ 
                      "Línea "++(show line)++": No se puede reconocer "++(show $ take 10 unknown)++ "..."
+                    
                     where lexVar cs = case span isAlpha cs of
                               ("E",rest)    -> cont TTypeE rest
                               ("def",rest)  -> cont TDef rest
+                              ("Let",rest)  -> cont TLet rest
+                              ("in",rest)   -> cont TIn rest
+                              ("suc", rest) -> cont TSuc rest
+                              ("cons", rest) -> cont TCons rest
+                              ("Nat", rest) -> cont TTypeNat rest
+                              ("ListNat", rest) -> cont TTypeListNat rest
+                              ("nil", rest) -> cont TNil rest
+                              ("R", rest) -> cont TR rest
+                              ("RL", rest) -> cont TRL rest
                               (var,rest)    -> cont (TVar var) rest
                           consumirBK anidado cl cont s = case s of
                               ('-':('-':cs)) -> consumirBK anidado cl cont $ dropWhile ((/=) '\n') cs
-                              ('{':('-':cs)) -> consumirBK (anidado+1) cl cont cs	
+                              ('{':('-':cs)) -> consumirBK (anidado+1) cl cont cs
                               ('-':('}':cs)) -> case anidado of
                                                   0 -> \line -> lexer cont cs (line+cl)
                                                   _ -> consumirBK (anidado-1) cl cont cs
                               ('\n':cs) -> consumirBK anidado (cl+1) cont cs
-                              (_:cs) -> consumirBK anidado cl cont cs     
+                              (_:cs) -> consumirBK anidado cl cont cs    
+                              [] -> \line -> Failed $ "Línea " ++ (show line) ++ ": Comentario no cerrado"
                                            
 stmts_parse s = parseStmts s 1
 stmt_parse s = parseStmt s 1

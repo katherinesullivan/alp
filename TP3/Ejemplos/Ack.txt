@@ -1,0 +1,50 @@
+R t1 t2 0 -> t1
+R t1 t2 (suc n) -> t2 (R t1 t2 n) n
+
+
+Ack 0             = R t1 t2 0
+\ n : Nat . suc n = t1
+
+Ack (suc m)                                                  = R t1 t2 (suc m)
+\ n : Nat . (isZero n) (Ack m 1) (Ack m (Ack m (n-1)))       = t2 (R t1 t2 m) m
+\ n : Nat . (isZero n) ((Ack m) 1) ((Ack m) ((Ack m) (n-1))) = t2 (Ack m) m
+
+\ am : Nat . \ m : Nat . \ n : Nat . (isZero n) (am 1) (am (am (n-1))) = t2
+
+
+def t1 = \ n : Nat . suc n
+def t2 = \ am : Nat . \ m : Nat . \ n : Nat . (isZero n) (am 1) (am (am (n-1)))
+
+def ack = \ m : Nat . R t1 t2 m
+
+
+
+
+
+
+def tt2 = \ rr : Nat . \ n1 : Nat . 
+
+rr = ack m (n-1)
+
+
+tt2 (ack m (n-1)) (n-1)
+
+tt2 ((t2 (ack (m-1)) (m-1)) (n-1)) (n-1)
+
+tt2 (R (r (suc 0)) tt2 (n-1)) (n-1)
+
+def t2 = \ r : Nat -> Nat . \ m1 : Nat . \ n : Nat . R (r (suc 0)) (\ rr : Nat . \ n1 : Nat . r rr) n
+            |
+            v
+        r n = ack (m-1) n
+
+t2 (ack (m-1)) (m-1)
+
+ack m = t2 (R (\ n : Nat . suc n) t2 (m-1)) (m-1)
+
+def ack = \ m : Nat . R (\ n : Nat . suc n) t2 m
+
+
+
+         n     ack m n 
+ack m : Nat -> Nat
