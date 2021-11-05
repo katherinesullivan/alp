@@ -40,10 +40,10 @@ import Data.Char
 %right VAR 'nil' '0'
 %left '=' 
 %right '->'
-%right 'suc'
-%right 'cons'
-%left 'RL'
-%left 'R'
+%nonassoc 'suc'
+%nonassoc 'cons'
+%nonassoc 'RL'
+%nonassoc 'R'
 %right '\\' '.' 'Let' 'in'
 
 
