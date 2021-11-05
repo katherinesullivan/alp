@@ -118,6 +118,6 @@ Tomemos $\Gamma = \{x: E \to E \to E, \ y: E \to E, \ z: E\}$
 
 La función \textit{infer} retorna un valor de tipo \textit{Either String Type} para poder retornar el tipo deseado en caso de que se haya podido realizar una inferencia de manera correcta, o una string que explique el error en caso de encontrarse con uno. 
 
-La función $(>>=)$ toma un dato del tipo \textit{Either String Type} y una función que dado un \textit{Type} devuelve un \textit{Either String Type}. Nuestra función chequea si el dato pasado es un \textit{String} (en nuestra implementación entendámoslo como un error), si es el caso, no hace nada con este dato (simplemente propaga el error), en cambio, si el dato pasado es un \textit{Type} le aplica la función pasada a este y $(>>=)$ devuelve ese resultado.
+La función $(>>=)$ toma un dato de tipo \textit{Either String Type} y una función que dado un \textit{Type} devuelve un \textit{Either String Type}, llamemosla \textit{f}. Nuestra función chequea si el dato pasado es un \textit{Left String} (en nuestra implementación entendámoslo como un error), si es el caso, no hace nada con este dato (simplemente propaga el error), en cambio, si el dato pasado es un \textit{Right Type}, $(>>=)$ retorna la aplicación de \textit{f} al tipo.
 
 \end{document}

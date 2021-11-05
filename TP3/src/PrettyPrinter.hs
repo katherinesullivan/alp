@@ -64,12 +64,7 @@ pp ii vs (RL t1 t2 t3) = text "RL "
 printNum :: Int -> [String] -> Term -> Int -> Doc
 printNum _ _ Zero i = text (show i)
 printNum ii vs (Suc n) i = printNum ii vs n (i+1)
-printNum ii vs x i = printNumBack ii vs x i
-
-printNumBack :: Int -> [String] -> Term -> Int -> Doc
-printNumBack ii vs x 0 = pp ii vs x
-printNumBack ii vs x i = text "suc " <> printNumBack ii vs x (i-1)
-
+printNum _ _ _ _ = error "printNum error" -- no deberia ingresar
 
 isLam :: Term -> Bool
 isLam (Lam _ _) = True
@@ -91,7 +86,7 @@ isNotAtom _ = False
 printType :: Type -> Doc
 printType EmptyT = text "E"
 printType Nat = text "Nat"
-printType ListNat = text "List Nat"
+printType ListNat = text "ListNat"
 printType (FunT t1 t2) =
   sep [parensIf (isFun t1) (printType t1), text "->", printType t2]
 

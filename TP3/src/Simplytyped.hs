@@ -21,11 +21,10 @@ conversion :: LamTerm -> Term
 conversion = conversion' []
 
 conversion' :: [String] -> LamTerm -> Term
-conversion' b (LVar n) = maybe (Free (Global n)) Bound (n `elemIndex` b)
-conversion' b (LApp t u) = conversion' b t :@: conversion' b u
+conversion' b (LVar n)     = maybe (Free (Global n)) Bound (n `elemIndex` b)
+conversion' b (LApp t u)   = conversion' b t :@: conversion' b u
 conversion' b (LAbs n t u) = Lam t (conversion' (n : b) u)
 conversion' b (LLet x t u) = Let (conversion' b t) (conversion' (x : b) u)
-  -- Let (conversion' b (LVar x)) (conversion' b t) (conversion' b u)
 conversion' b LZero        = Zero
 conversion' b (LSuc n)     = Suc (conversion' b n)
 conversion' b (LR t1 t2 n) = R (conversion' b t1) (conversion' b t2) (conversion' b n)
@@ -68,7 +67,7 @@ eval e (Suc n) = case eval e n of
                     Num x -> Num (VSuc x)
                     _ -> error "Error de tipo en run-time, verificar type checker"
 eval e (R u1 _ Zero) = eval e u1
-eval e (R u1 u2 (Suc n)) = eval e (u2 :@: R u1 u2 n :@: n)    
+eval e (R u1 u2 (Suc n)) = eval e (u2 :@: R u1 u2 n :@: n)  
 eval e (R u1 u2 n) = case eval e n of
                         Num VZero -> eval e u1
                         Num (VSuc x) -> eval e (u2 :@: R u1 u2 (quote (Num x)) :@: quote (Num x))                      
@@ -154,7 +153,7 @@ infer' c e (R t1 t2 t3) = infer' c e t1 >>= \tt1 -> infer' c e t2 >>= \tt2 ->
                                                                                           Nat -> ret tt1
                                                                                           _   -> matchError Nat tt3
                                                          else if u1 == tt1 then matchError tt1 u2
-                                                                           else matchError tt1 u1 -- esta bien que solo digamos que esta mal u1?
+                                                                           else matchError tt1 u1
     _ -> matchError (FunT tt1 (FunT Nat tt1)) tt2
 infer' c e Nil = ret ListNat 
 infer' c e (Cons x xs) = infer' c e x >>= \tx -> infer' c e xs >>= \txs -> if tx == Nat && txs == ListNat then ret ListNat  

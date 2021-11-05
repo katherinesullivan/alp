@@ -22,7 +22,6 @@ module Common where
             | FunT Type Type
             | Nat
             | ListNat
-
             deriving (Show, Eq)
   
   -- Términos con nombres

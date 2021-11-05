@@ -20,11 +20,12 @@ def ack = \ m : Nat . R t1 t2 m
 
 
 
+{- Pensado de abajo hacia arriba xd -}
 
-
-def tt2 = \ rr : Nat . \ n1 : Nat . 
-
-rr = ack m (n-1)
+def tt2 = \ rr : Nat . \ n1 : Nat . r rr
+             |
+             v
+            rr = ack m (n-1)
 
 
 tt2 (ack m (n-1)) (n-1)
@@ -40,11 +41,22 @@ def t2 = \ r : Nat -> Nat . \ m1 : Nat . \ n : Nat . R (r (suc 0)) (\ rr : Nat .
 
 t2 (ack (m-1)) (m-1)
 
-ack m = t2 (R (\ n : Nat . suc n) t2 (m-1)) (m-1)
+(ack m =) t2 (R (\ n : Nat . suc n) t2 (m-1)) (m-1)
 
 def ack = \ m : Nat . R (\ n : Nat . suc n) t2 m
 
 
+          n     ack m n 
+ack m :: Nat -> Nat
 
-         n     ack m n 
-ack m : Nat -> Nat
+
+
+{- Función Fatorial -}
+
+def tsuma = \ r : Nat . \ x : Nat . suc r
+def suma = \ x : Nat . \ y : Nat . R y tsuma x
+
+def tmult = \ r : Nat -> Nat . \ x : Nat . \ y : Nat . suma (r y) y
+def mult = \ x : Nat . R (\ y : Nat . 0) tmult x
+
+def fact = \ n : Nat . R (suc 0) (\ x : Nat . \ y : Nat . mult (suc y) x) n
