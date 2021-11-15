@@ -1,0 +1,19 @@
+// Sistema T
+
+// Ejercicio 8
+def pred = \ n : Nat . R 0 (\ r : Nat . \ x : Nat . x) n
+
+def tsuma = \ r : Nat . \ x : Nat . succ r
+def suma = \ x : Nat . \ y : Nat . R y tsuma x
+
+def tresta = \ r : Nat . \ y : Nat . pred r
+def resta = \ x : Nat . \ y : Nat . R x tresta y
+
+def tmult = \ r : Nat -> Nat . \ x : Nat . \ y : Nat . suma (r y) y
+def mult = \ x : Nat . R (\ y : Nat . 0) tmult x
+
+def is0 = \ n : Nat . R true (\ r : Bool . \ nn : Nat . false) n
+
+def eq = \ x : Nat . \ y : Nat . is0 (resta x y)
+
+// Ejercicio 9
