@@ -48,23 +48,27 @@ pp ii vs (Let t1 t2) = text "Let "
                        <> text " = "
                        <> pp ii vs t1
                        <> text " in "
-                       <> pp ii vs t2
+                       <> pp (ii + 1) vs t2 --
 pp ii vs Zero = text "0"
 pp ii vs (Suc n) = printNum ii vs (Suc n) 0
 pp ii vs (R t1 t2 t3) = text "R "
                         <>
-                        sep [pp ii vs t1, pp ii vs t2, pp ii vs t3]
+                        sep [parensIf (isLam t1 || isApp t1 || isNotAtom t1) (pp ii vs t1), parensIf (isLam t2 || isApp t2 || isNotAtom t2) (pp ii vs t2), pp ii vs t3] --
 pp ii vs Nil = text "[]"
 pp ii vs (Cons x xs) = sep [pp ii vs x, text ":", pp ii vs xs]
 pp ii vs (RL t1 t2 t3) = text "RL "
                          <> 
-                         sep [pp ii vs t1, pp ii vs t2, pp ii vs t3]
+                         sep [parensIf (isLam t1 || isApp t1 || isNotAtom t1) (pp ii vs t1), parensIf (isLam t2 || isApp t2 || isNotAtom t2) (pp ii vs t2), pp ii vs t3] --
 
 
 printNum :: Int -> [String] -> Term -> Int -> Doc
 printNum _ _ Zero i = text (show i)
 printNum ii vs (Suc n) i = printNum ii vs n (i+1)
-printNum _ _ _ _ = error "printNum error" -- no deberia ingresar
+printNum ii vs x i = printNumBack ii vs x i
+
+printNumBack :: Int -> [String] -> Term -> Int -> Doc
+printNumBack ii vs x 0 = pp ii vs x
+printNumBack ii vs x i = text "suc " <> printNumBack ii vs x (i-1)
 
 isLam :: Term -> Bool
 isLam (Lam _ _) = True
