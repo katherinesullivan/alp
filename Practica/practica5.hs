@@ -121,8 +121,12 @@ Por inducción estructural sobre el funtor
 fmapGenTree id (Gen x xs)
 = {def.fmapGenTree}
 Gen (id x) (map (fmapGenTree id) xs)
-= {}
-???
+= {HI}
+Gen (id x) (map id xs)
+= {suponemos (o podriamos probar) que las listas tambien son functores y 
+por lo tanto su funcion map cumple las propiedades del map de funtores}
+Gen (id x) (id xs)
+= {def.id}
 Gen x xs
 = {def.id}
 id (Gen x xs)
@@ -137,8 +141,12 @@ fmapGenTree f (fmapGenTree g (Gen x xs))
 fmapGenTree f (Gen (g x) (map (fmapGenTree g) xs))
 = {def.fmapGenTree}
 Gen (f (g x)) (map (fmapGenTree f) (map (fmapGenTree g) xs))
-
-???
+= {def.(.)}
+Gen ((f . g) x) (((map (fmapGenTree f) . (map (fmapGenTree g)) xs)
+= {suponemos (o podriamos probar) que las listas tambien son functores y 
+por lo tanto su funcion map cumple las propiedades del map de funtores}
+Gen ((f . g) x) (map (fmapGenTree f . fmapGenTree g) xs)
+= {HI}
 Gen ((f . g) x) (map (fmapGenTree (f . g)) xs)
 = {def.fmapGenTree}
 fmapGenTree (f . g) (Gen x xs)
@@ -156,8 +164,38 @@ fmapCont :: (a -> b) -> Cont a -> Cont b
 fmapCont f (C g) = C (\ i -> g (i . f))
 
 {-
--}
+Probamos el buen comportamiento:
 
+fmap id = id : (functor.1)
+fmap f . fmap g = fmap (f . g) : (functor.2)
+
+functor.1:
+fmapCont id (C g)
+= {def.fmapCont}
+C (\ i -> g (i . id))
+= {def.id}
+C (\ i -> g i)
+= {f == \i -> g i <=> f i == g i <=> f == g}
+C g
+= {def.id}
+id (C g)
+
+functor.2:
+(fmapCont f . fmapCont h) (C g)
+= {def.(.)}
+fmapCont f (fmapCont h (C g))
+= {def.fmapCOnt}
+fmapCont f (C (\ i -> g (i . h)))
+= {def.fmapCOnt}
+C (\ i -> (\ j -> g (j . h)) (i . f))
+= {def.\}
+C (\ i -> g ((i . f) . h))
+= {(.) es asociativo}
+C (\ i -> g (i . (f . h)))
+= {def.fmapCont}
+fmapCont (f . h) (C g)
+
+-}
 
 -- Ejercicio 2
 
@@ -178,4 +216,4 @@ fmap f . fmap g = fmap (f . g) : (functor.2)
 data Br b a = B b (a,a)
 
 instance Functor (Br b) where
- fmap f (B x (y,z)) = B x (f z,f y)
+    fmap f (B x (y,z)) = B x (f z,f y)

@@ -20,7 +20,7 @@ def ack = \ m : Nat . R t1 t2 m
 
 
 
-{- Thought process unción de Ackerman Pensado de abajo hacia arriba xd -}
+{- Thought process función de Ackerman Pensado de abajo hacia arriba xd -}
 
 def tt2 = \ rr : Nat . \ n1 : Nat . r rr
              |

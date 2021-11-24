@@ -14,6 +14,9 @@ def mult = \ x : Nat . R (\ y : Nat . 0) tmult x
 
 def is0 = \ n : Nat . R true (\ r : Bool . \ nn : Nat . false) n
 
-def eq = \ x : Nat . \ y : Nat . is0 (resta x y)
+def tleq = \ r : Bool . \ x1 : Nat . \ y : Nat . R false (r (pred y)) y
+def leq = \ x : Nat . R (\ y : Nat . true) tleq x
+
+def eq = \ x : Nat . \ y : Nat . D (leq x y) (is0 (resta y x)) false
 
 // Ejercicio 9

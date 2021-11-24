@@ -11,7 +11,7 @@ import           Data.Maybe
 import           Prelude                 hiding ( fst
                                                 , snd
                                                 )
-import           Data.Strict.Tuple
+-- import           Data.Strict.Tuple
 import           Control.Monad                  ( liftM
                                                 , ap
                                                 )
@@ -56,7 +56,12 @@ stepCommStar c    = stepComm c >>= \c' -> stepCommStar c'
 
 -- Evalua un paso de un comando
 stepComm :: MonadState m => Comm -> m Comm
-stepComm = undefined
+stepComm Skip = return Skip
+stepComm (Let v e) = (evalExp e >>= (\ n -> update v n)) >>= (\ _ -> return Skip)
+stepComm (Seq Skip c1) = return c1
+-- stepComm (Seq c0 c1) = 
+  -- return (Seq c0' c1) where c0' = runState (stepComm c0) 
+stepComm (While)
 
 -- Evalua una expresion
 evalExp :: MonadState m => Exp a -> m a
