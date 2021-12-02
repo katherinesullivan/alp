@@ -15,6 +15,7 @@ import           Prelude                 hiding ( fst
 import           Control.Monad                  ( liftM
                                                 , ap
                                                 )
+import GHC.Generics (C1)
 
 -- Entornos
 type Env = M.Map Variable Int
@@ -57,14 +58,60 @@ stepCommStar c    = stepComm c >>= \c' -> stepCommStar c'
 -- Evalua un paso de un comando
 stepComm :: MonadState m => Comm -> m Comm
 stepComm Skip = return Skip
-stepComm (Let v e) = (evalExp e >>= (\ n -> update v n)) >>= (\ _ -> return Skip)
+stepComm (Let v e) = do m <- evalExp e
+                        update v m
+                        return Skip
 stepComm (Seq Skip c1) = return c1
--- stepComm (Seq c0 c1) = 
-  -- return (Seq c0' c1) where c0' = runState (stepComm c0) 
-stepComm (While)
+stepComm (Seq c0 c1) = do c <- stepComm c0
+                          return (Seq c c1) -- no iria el llamado recursivo pq esto es de paso chico
+-- stepComm (Seq c0 c1) = do c <- stepComm c0
+--                           stepComm (Seq c c1)
+stepComm (IfThenElse b c0 c1) = do b' <- evalExp b
+                                   if b' then return c0 else return c1
+-- stepComm (While e c) = 
 
 -- Evalua una expresion
 evalExp :: MonadState m => Exp a -> m a
-evalExp = undefined
-
-
+evalExp (Const n) = return n
+evalExp (Var v) = lookfor v
+evalExp (UMinus e) = do n <- evalExp e
+                        return (-n)
+evalExp (Plus e0 e1) = do n0 <- evalExp e0
+                          n1 <- evalExp e1
+                          return (n0 + n1)
+evalExp (Minus e0 e1) = do n0 <- evalExp e0
+                           n1 <- evalExp e1
+                           return (n0 - n1)
+evalExp (Times e0 e1) = do n0 <- evalExp e0
+                           n1 <- evalExp e1
+                           return (n0 * n1)
+evalExp (Div e0 e1) = do n0 <- evalExp e0
+                         n1 <- evalExp e1
+                         return (div n0 n1)
+evalExp BTrue = return True
+evalExp false = return False
+evalExp (Lt e0 e1) = do n0 <- evalExp e0
+                        n1 <- evalExp e1
+                        return (n0 < n1)
+evalExp (Gt e0 e1) = do n0 <- evalExp e0
+                        n1 <- evalExp e1
+                        return (n0 > n1)
+evalExp (And e0 e1) = do b0 <- evalExp e0
+                         b1 <- evalExp e1
+                         return (b0 && b1)
+evalExp (Or e0 e1) = do b0 <- evalExp e0
+                        b1 <- evalExp e1
+                        return (b0 || b1)
+evalExp (Not e) = do b <- evalExp e
+                     return (! b)
+evalExp (Eq e0 e1) = do n0 <- evalExp e0
+                        n1 <- evalExp e1
+                        return (n0 == n1)
+evalExp (NEq e0 e1) = do n0 <- evalExp e0
+                         n1 <- evalExp e1
+                         return (n0 != n1)
+evalExp (EAssgn v e) = do n <- evalExp e
+                          update v n
+                          return n
+evalExp (ESeq e0 e1) = do evalExp e0
+                          evalExp e1
