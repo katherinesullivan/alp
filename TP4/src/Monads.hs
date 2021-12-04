@@ -20,5 +20,5 @@ class Monad m => MonadError m where
 -- Ejercicio 3.b: Dar una clase que provea las operaciones necesarias para
 -- llevar la traza de ejecución. Llamela MonadTrace.
 class Monad m => MonadTrace m where
-    -- Inserta una traza
-    insert :: Trace -> m a
+    -- Concatena dos trazas
+    concat :: Trace -> m ()
