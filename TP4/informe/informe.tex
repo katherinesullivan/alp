@@ -1,0 +1,164 @@
+\documentclass[11pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsfonts}
+\usepackage{natbib}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{mathrsfs} % Cursive font
+\usepackage{graphicx}
+\usepackage{ragged2e}
+\usepackage{fancyhdr}
+\usepackage{nameref}
+\usepackage{wrapfig}
+%\usepackage{ebproof}
+
+% to set spacing between lines
+\usepackage{setspace}
+
+% to rotate content 90 degrees
+\usepackage{lscape}
+
+% to define deriving trees
+% \usepackage{ebproof}
+%\usepackage{prftree}
+
+% defining command for the curly arrow
+\newcommand{\curly}{\mathrel{\leadsto}}
+
+
+\usepackage{mathtools}
+\usepackage{xparse} \DeclarePairedDelimiterX{\Iintv}[1]{\llbracket}{\rrbracket}{\iintvargs{#1}}
+\NewDocumentCommand{\iintvargs}{>{\SplitArgument{1}{,}}m}
+{\iintvargsaux#1}
+\NewDocumentCommand{\iintvargsaux}{mm} {#1\mkern1.5mu,\mkern1.5mu#2}
+
+\makeatletter
+\newcommand*{\currentname}{\@currentlabelname}
+\makeatother
+
+\usepackage[a4paper,hmargin=1in, vmargin=1.4in,footskip=0.25in]{geometry}
+
+
+%\addtolength{\hoffset}{-1cm}
+%\addtolength{\hoffset}{-2.5cm}
+%\addtolength{\voffset}{-2.5cm}
+\addtolength{\textwidth}{0.2cm}
+%\addtolength{\textheight}{2cm}
+\setlength{\parskip}{8pt}
+\setlength{\parindent}{0.5cm}
+\linespread{1.5}
+
+\pagestyle{fancy}
+\fancyhf{}
+\rhead{TP4 - Cipullo, Sullivan}
+\lhead{Análisis de Lenguajes de Programación}
+\rfoot{\vspace{1cm} \thepage}
+
+\renewcommand*\contentsname{\LARGE Índice}
+
+\begin{document}
+
+\begin{titlepage}
+    \begin{center}
+        \vfill
+        \vfill
+            \vspace{0.7cm}
+            \noindent\textbf{\Huge Trabajo Práctico 4}\par
+            \noindent\textbf{\Huge Análisis de Lenguajes de Programación}\par
+            \vspace{.5cm}
+        \vfill
+        \noindent \textbf{\huge Alumnas:}\par
+        \vspace{.5cm}
+        \noindent \textbf{\Large Cipullo, Inés}\par
+        \noindent \textbf{\Large Sullivan, Katherine}\par
+ 
+        \vfill
+        \large Universidad Nacional de Rosario \par
+        \noindent\large 2021
+    \end{center}
+\end{titlepage}
+\ \par
+
+
+% Setting the spacing between lines
+\setstretch{0}
+
+\section*{Ejercicio 1.a)}
+
+Debemos probar que \verb|State| es una mónada. Para eso, verificaremos que se cumplan las tres propiedades monádicas: 
+
+% $\mathrel{\gg \! \! =}$ mathrel permite ponerlos juntitos y cada vez que le tiras un \! acerca más el primero al segundo
+
+\begin{itemize}
+    \item (monad.1): $return\ x \mathrel{\gg \! \! =} f = f x$
+    \item (monad.2): $t \mathrel{\gg \! \! =} return = t$
+    \item (monad.3): $(t \mathrel{\gg \! \! =} f) \mathrel{\gg \! \! =} g = t \mathrel{\gg \! \! =} (\lambda x \to f x \mathrel{\gg \! \! =} g))$
+\end{itemize} 
+
+\textbf{monad.1}
+
+Debemos probar que 
+
+$$return\ x \mathrel{\gg \! \! =} f = f x$$
+
+Veamos que 
+\vspace{2mm}
+
+\begin{align*}
+    &return\ x \mathrel{\gg \! \! =} f\\
+    &= \{def\ \mathrel{\gg \! \! =}\} \\
+    &State\ (\lambda s \to let\ (v :\mathrel{!}: s') = runState\ (return\ x)\ s\
+                            in\ runState\ (f\ v)\ s') \\
+    &= \{def\ return\} \\ 
+    &State\ (\lambda s \to let\ (v :\mathrel{!}: s') = runState\ (State\ (\lambda s_1 \to let\ (x :\mathrel{!}: s_1)))\ s\ in\ runState\ (f\ v)\ s') \\
+    &= \{def\ runState\} \\
+    &State\ (\lambda s \to let\ (v :\mathrel{!}: s') = (x :\mathrel{!}: s)\ in \ runState\ (f\ v)\ s')\\
+    &= \{def\ let\} \\
+    &State\ (\lambda s \to runState\ (f\ x)\ s)) \\ %pa ver el x
+    &= \{def\ runState\ y\ supongamos\ f\ x = State\ (\lambda t \to g(t))\} \\
+    &State\ (\lambda s \to g(s))\\
+    &= \{def\ f\ x\}\\
+    &f\ x
+\end{align*}
+\vspace{2mm}
+
+Por lo que vale (monad.1).
+\vspace{4mm}
+
+\textbf{monad.2}
+
+Debemos probar que
+
+$$t \mathrel{\gg \! \! =} return = t$$
+
+Veamos que 
+\vspace{2mm}
+
+\begin{align*}
+    &t \mathrel{\gg \! \! =} return\\
+    &= \{def\ \mathrel{\gg \! \! =}\} \\
+    &State\ (\lambda s \to let\ (v :\mathrel{!}: s') = runState\ t\ s\ in\ runState (return\ v)\ s')\\
+    &=\{def\ return\} \\
+    &State\ (\lambda s \to let\ (v :\mathrel{!}: s') = runState\ t\ s\ in\ runState\ (State\ (\lambda s_1 \to (v :\mathrel{!}: s_1)))\ s') \\
+    &=\{def\ runState\} \\
+    &State\ (\lambda s \to let\ (v :\mathrel{!}: s') = runState\ t\ s\ in\ (v :\mathrel{!}: s')) \\
+    &= \{def\ let\}\\
+    &State\ (\lambda s \to runState\ t\ s) \\
+    &= \{def\ State\ y\ runState\}\\
+    &t
+\end{align*}
+\vspace{2mm}
+
+Por lo que vale (monad.2). 
+\vspace{4mm}
+
+\textbf{monad.3}
+
+Debemos probar que 
+
+$$(t \mathrel{\gg \! \! =} f) \mathrel{\gg \! \! =} g = t \mathrel{\gg \! \! =} (\lambda x \to f x \mathrel{\gg \! \! =} g))$$
+
+Ta complicadou
+
+\end{document}
