@@ -11,7 +11,7 @@ import           Data.Maybe
 import           Prelude                 hiding ( fst
                                                 , snd
                                                 )
--- import           Data.Strict.Tuple
+import           Data.Strict.Tuple
 import           Control.Monad                  ( liftM
                                                 , ap
                                                 )
@@ -63,7 +63,8 @@ stepComm (Seq Skip c1) = return c1
 stepComm (Seq c0 c1) = do c <- stepComm c0
                           return (Seq c c1)
 stepComm (IfThenElse b c0 c1) = evalExp b >>= (\ b' -> if b' then return c0 else return c1) 
-stepComm (Repeat c b) = return (Seq c (IfThenElse b Skip (Repeat c b)))
+-- stepComm (Repeat c b) = return (Seq c (IfThenElse b Skip (Repeat c b)))
+stepComm (While b c) = return (IfThenElse b (Seq c (While b c)) Skip)
 
 -- Evalua una expresion
 evalExp :: MonadState m => Exp a -> m a
@@ -75,14 +76,14 @@ evalExp (Minus e0 e1) = evalExp e0 >>= (\ n0 -> evalExp e1 >>= ( \ n1 -> return 
 evalExp (Times e0 e1) = evalExp e0 >>= (\ n0 -> evalExp e1 >>= ( \ n1 -> return (n0 * n1)))
 evalExp (Div e0 e1) = evalExp e0 >>= (\ n0 -> evalExp e1 >>= ( \ n1 -> return (div n0 n1)))
 evalExp BTrue = return True
-evalExp false = return False
+evalExp BFalse = return False
 evalExp (Lt e0 e1) = evalExp e0 >>= (\ n0 -> evalExp e1 >>= ( \ n1 -> return (n0 < n1)))
 evalExp (Gt e0 e1) = evalExp e0 >>= (\ n0 -> evalExp e1 >>= ( \ n1 -> return (n0 > n1)))
 evalExp (And e0 e1) = evalExp e0 >>= (\ b0 -> evalExp e1 >>= ( \ b1 -> return (b0 && b1)))
 evalExp (Or e0 e1) = evalExp e0 >>= (\ b0 -> evalExp e1 >>= ( \ b1 -> return (b0 || b1)))
-evalExp (Not e) = evalExp e >>= (\ b -> return (! b))
+evalExp (Not e) = evalExp e >>= (\ b -> return (not b))
 evalExp (Eq e0 e1) = evalExp e0 >>= (\ n0 -> evalExp e1 >>= ( \ n1 -> return (n0 == n1)))
-evalExp (NEq e0 e1) = evalExp e0 >>= (\ n0 -> evalExp e1 >>= ( \ n1 -> return (n0 != n1)))
+evalExp (NEq e0 e1) = evalExp e0 >>= (\ n0 -> evalExp e1 >>= ( \ n1 -> return (n0 /= n1)))
 evalExp (EAssgn v e) = evalExp e >>= (\ n -> do update v n
                                                 return n)
 evalExp (ESeq e0 e1) = do evalExp e0

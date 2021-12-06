@@ -49,6 +49,8 @@ pComm (IfThenElse b c1 c2) =
     $$  rbrace
 pComm (While b c) =
   text "while" <+> parens (pExp b) $$ lbrace $$ nest tabW (pComm c) $$ rbrace
+-- pComm (Repeat c b) = 
+  -- text "repeat" <+> lbrace $$ nest tabW (pComm c) $$ rbrace <+> text "until" <+> parens (pExp b)
 
 renderComm :: Comm -> String
 renderComm = render . pComm

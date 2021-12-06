@@ -21,4 +21,4 @@ class Monad m => MonadError m where
 -- llevar la traza de ejecución. Llamela MonadTrace.
 class Monad m => MonadTrace m where
     -- Concatena dos trazas
-    concat :: Trace -> m ()
+    concatTrace :: Trace -> m ()

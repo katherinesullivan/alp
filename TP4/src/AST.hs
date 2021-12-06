@@ -36,7 +36,7 @@ data Comm
   | Let Variable (Exp Int)
   | Seq Comm Comm
   | IfThenElse (Exp Bool) Comm Comm
-  | Repeat Comm (Exp Bool)
+  | While (Exp Bool) Comm
   deriving (Show, Eq)
 
 pattern IfThen :: Exp Bool -> Comm -> Comm
