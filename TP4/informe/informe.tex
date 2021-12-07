@@ -20,8 +20,8 @@
 \usepackage{lscape}
 
 % to define deriving trees
-% \usepackage{ebproof}
-%\usepackage{prftree}
+\usepackage{ebproof}
+% \usepackage{prftree}
 
 % defining command for the curly arrow
 \newcommand{\curly}{\mathrel{\leadsto}}
@@ -84,7 +84,18 @@
 % Setting the spacing between lines
 \setstretch{0}
 
-\section*{Ejercicio 1.a)}
+\section*{Semántica de While}
+Enunciamos la semántica del comando \verb|while|:
+
+\begin{center}
+    \begin{prooftree}
+        \hypo{}
+        \infer1[WHILE]{\langle \textbf{while} \ b \ c, \sigma \rangle \rightsquigarrow \langle \textbf{if} \ b \ \textbf{then} \ c; \textbf{while} \ b \ c \ \textbf{else skip}, \sigma \rangle}
+    \end{prooftree}
+\end{center}
+
+
+\section*{Ejercicio 1.a}
 
 Debemos probar que \verb|State| es una mónada. Para eso, verificaremos que se cumplan las tres propiedades monádicas: 
 
@@ -100,7 +111,7 @@ Debemos probar que \verb|State| es una mónada. Para eso, verificaremos que se c
 
 Debemos probar que 
 
-$$return\ x \mathrel{\gg \! \! =} f = f x$$
+$$return\ x \mathrel{\gg \! \! =} f = f\ x$$
 
 Veamos que 
 \vspace{2mm}
@@ -108,23 +119,26 @@ Veamos que
 \begin{align*}
     &return\ x \mathrel{\gg \! \! =} f\\
     &= \{def\ \mathrel{\gg \! \! =}\} \\
-    &State\ (\lambda s \to let\ (v :\mathrel{!}: s') = runState\ (return\ x)\ s\
-                            in\ runState\ (f\ v)\ s') \\
+    &State\ (\lambda s \to let\ (v :\mathrel{!}: s') = runState\ (return\ x)\ s\ in\ runState\ (f\ v)\ s') \\
     &= \{def\ return\} \\ 
     &State\ (\lambda s \to let\ (v :\mathrel{!}: s') = runState\ (State\ (\lambda s_1 \to let\ (x :\mathrel{!}: s_1)))\ s\ in\ runState\ (f\ v)\ s') \\
     &= \{def\ runState\} \\
     &State\ (\lambda s \to let\ (v :\mathrel{!}: s') = (x :\mathrel{!}: s)\ in \ runState\ (f\ v)\ s')\\
     &= \{def\ let\} \\
-    &State\ (\lambda s \to runState\ (f\ x)\ s)) \\ %pa ver el x
-    &= \{def\ runState\ y\ supongamos\ f\ x = State\ (\lambda t \to g(t))\} \\
+    &State\ (\lambda s \to runState\ (f\ x)\ s)) \\
+    &= \{def\ runState\ y\ def\ (f\ x)\ (*)\} \\
     &State\ (\lambda s \to g(s))\\
-    &= \{def\ f\ x\}\\
+    &= \{def\ (f\ x)\}\\
     &f\ x
 \end{align*}
 \vspace{2mm}
 
+$(*)$ Como $f\ x$ es de tipo $State\ b$, lo podemos definir como $f\ x = State\ (\lambda t \to g(t))$, donde $g$ es una función genérica de tipo $a \to b$, donde $a$ es el tipo de $x$.
+
+\vspace{2mm}
+
 Por lo que vale (monad.1).
-\vspace{4mm}
+\vspace{5cm}
 
 \textbf{monad.2}
 
@@ -138,27 +152,84 @@ Veamos que
 \begin{align*}
     &t \mathrel{\gg \! \! =} return\\
     &= \{def\ \mathrel{\gg \! \! =}\} \\
-    &State\ (\lambda s \to let\ (v :\mathrel{!}: s') = runState\ t\ s\ in\ runState (return\ v)\ s')\\
+    &State\ (\lambda s \to let\ (v :\mathrel{!}: s') = runState\ t\ s\ in\ runState\ (return\ v)\ s')\\
     &=\{def\ return\} \\
     &State\ (\lambda s \to let\ (v :\mathrel{!}: s') = runState\ t\ s\ in\ runState\ (State\ (\lambda s_1 \to (v :\mathrel{!}: s_1)))\ s') \\
     &=\{def\ runState\} \\
     &State\ (\lambda s \to let\ (v :\mathrel{!}: s') = runState\ t\ s\ in\ (v :\mathrel{!}: s')) \\
     &= \{def\ let\}\\
     &State\ (\lambda s \to runState\ t\ s) \\
-    &= \{def\ State\ y\ runState\}\\
-    &t
+    &= \{def\ t\ (**)\}\\
+    &State\ (\lambda s \to runState\ (State\ (\lambda y \to h(y)))\ s) \\
+    &= \{def\ runState\} \\
+    &State\ (\lambda s \to h(s)) \\
+    &= \{def\ t\} \\
+    &t 
 \end{align*}
 \vspace{2mm}
 
-Por lo que vale (monad.2). 
-\vspace{4mm}
+$(**)$ Como $t$ es de tipo $State\ a$, lo podemos definir como $t\ = State\ (\lambda y \to h(y))$
+
+\vspace{2mm}
+
+Por lo que vale (monad.2).
+\vspace{12cm}
 
 \textbf{monad.3}
 
 Debemos probar que 
 
-$$(t \mathrel{\gg \! \! =} f) \mathrel{\gg \! \! =} g = t \mathrel{\gg \! \! =} (\lambda x \to f x \mathrel{\gg \! \! =} g))$$
+$$(t \mathrel{\gg \! \! =} f) \mathrel{\gg \! \! =} g = t \mathrel{\gg \! \! =} (\lambda x \to f\ x \mathrel{\gg \! \! =} g))$$
 
-Ta complicadou
+Veamos que 
+\vspace{2mm}
+
+\begin{align*}
+    &t \mathrel{\gg \! \! =} (\lambda x \to f\ x \mathrel{\gg \! \! =} g)) \\
+    &= \{def\ \mathrel{\gg \! \! =} \}\\
+    &State\ (\lambda s \to let\ (v :\mathrel{!}: s') = runState\ t\ s\ \\
+    &\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ in\ runState\ ((\lambda x \to State\ (\lambda p \to let\ (r :\mathrel{!}: p') = runState\ (f\ x)\ p\ \\
+    &\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ in\ runState\ (g\ r)\ p'))\ v)\ s') \\ 
+    &= \{def\ aplicacion\ (\lambda x)\} \\
+    &State\ (\lambda s \to let\ (v :\mathrel{!}: s') = runState\ t\ s\ \\
+    &\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ in\ runState\ (State\ (\lambda p \to let\ (r :\mathrel{!}: p') = runState\ (f\ v)\ p\ \\
+    &\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ in\ runState\ (g\ r)\ p'))\ s') \\ 
+    &= \{def\ runState\} \\
+    &State\ (\lambda s \to let\ (v :\mathrel{!}: s') = runState\ t\ s\ \\
+    &\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ in\ (\lambda p \to let\ (r :\mathrel{!}: p') = runState\ (f\ v)\ p\ 
+                                              in\ runState\ (g\ r)\ p')\ s') \\ 
+    &= \{def\ aplicacion\ (\lambda p)\} \\
+    &State\ (\lambda s \to let\ (v :\mathrel{!}: s') = runState\ t\ s\ \\
+    &\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ in\ let\ (r :\mathrel{!}: p') = runState\ (f\ v)\ s'\ 
+                                           in\ runState\ (g\ r)\ p') \\ 
+    &= \{def\ let\} \\
+    &State\ (\lambda s \to let\ (v :\mathrel{!}: s') = runState\ t\ s\ \\
+    &\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ (r :\mathrel{!}: p') = runState\ (f\ v)\ s'\\
+    &\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ in\ runState\ (g\ r)\ p') \\ 
+    &= \{def\ let\} \\
+    &State\ (\lambda s \to let\ (r :\mathrel{!}: p') = runState\ (State\ (\lambda s'' \to let\ (v :\mathrel{!}: s') = runState\ t\ s''\ \\
+    &\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ in\ runState\ (f\ v)\ s'))\ s \\
+    &\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ in\ runState\ (g\ r)\ p') \\ 
+    &= \{def\ \mathrel{\gg \! \! =} \}\\
+    &State\ (\lambda s \to let\ (r :\mathrel{!}: p') = runState\ (t \mathrel{\gg \! \! =} f)\ s\ in\ runState\ (g\ r)\ p')\\ 
+    &= \{def\ \mathrel{\gg \! \! =} \}\\
+    &(t \mathrel{\gg \! \! =} f) \mathrel{\gg \! \! =} g\\
+\end{align*}
+
+\vspace{2mm}
+
+Por lo que vale (monad.3).
+
+\vspace{10cm}
+
+% \section*{Semántica de While}
+% Enunciamos la semántica del comando \verb|while|:
+
+% \begin{center}
+%     \begin{prooftree}
+%         \hypo{}
+%         \infer1[WHILE]{\langle \textbf{while} \ b \ c, \sigma \rangle \rightsquigarrow \langle \textbf{if} \ b \ \textbf{then} \ c; \textbf{while} \ b \ c \ \textbf{else skip}, \sigma \rangle}
+%     \end{prooftree}
+% \end{center}
 
 \end{document}

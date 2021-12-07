@@ -63,7 +63,6 @@ stepComm (Seq Skip c1) = return c1
 stepComm (Seq c0 c1) = do c <- stepComm c0
                           return (Seq c c1)
 stepComm (IfThenElse b c0 c1) = evalExp b >>= (\ b' -> if b' then return c0 else return c1) 
--- stepComm (Repeat c b) = return (Seq c (IfThenElse b Skip (Repeat c b)))
 stepComm (While b c) = return (IfThenElse b (Seq c (While b c)) Skip)
 
 -- Evalua una expresion
